@@ -11,4 +11,4 @@ def line():
 
     plt.plot(y, 'r-')
     plt.axis((0, 10, None, None))
-    plt.show()    
+    plt.show()
