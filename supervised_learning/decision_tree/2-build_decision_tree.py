@@ -95,7 +95,7 @@ class Leaf(Node):
 
     def __str__(self):
         """STR"""
-        return f"-> leaf [value={self.value}]"
+        return f"leaf [value={self.value}]"  # Leaf çıxışında artıq -> yoxdur
 
 class Decision_Tree:
     """Decision tree object containing the root node."""
