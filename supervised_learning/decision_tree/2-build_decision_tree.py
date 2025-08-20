@@ -50,19 +50,19 @@ class Node:
             return 1 + left_count + right_count
 
     def left_child_add_prefix(self, text):
-        """Left child"""
+        """Left child formatting"""
         lines = text.split("\n")
-        new_text = "    +--" + lines[0] + "\n"
+        new_text = "    +--->" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += ("    |  " + x) + "\n"
-        return (new_text)
+            new_text += "    |  " + x + "\n"
+        return new_text
 
     def right_child_add_prefix(self, text):
-        """Right child without the vertical |"""
+        """Right child formatting without the vertical |"""
         lines = text.split("\n")
-        new_text = "    +--" + lines[0] + "\n"
+        new_text = "    +--->" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += "    |  " + x + "\n"  # burada '|' sola çəkilir
+            new_text += "       " + x + "\n"
         return new_text
 
     def __str__(self):
