@@ -58,11 +58,11 @@ class Node:
         return (new_text)
 
     def right_child_add_prefix(self, text):
-        """Format the right child branch"""
+        """Right child without the vertical |"""
         lines = text.split("\n")
         new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += "       " + x + "\n"
+            new_text += "    |  " + x + "\n"  # burada '|' sola çəkilir
         return new_text
 
     def __str__(self):
