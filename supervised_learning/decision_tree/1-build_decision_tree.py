@@ -64,10 +64,6 @@ class Leaf(Node):
         """Return the depth of this leaf."""
         return self.depth
 
-    def __init__(self):
-        super().__init__()
-        self.is_leaf = True
-
     def count_nodes_below(self, only_leaves=False):
         return 1 if only_leaves else 1
 
