@@ -34,6 +34,21 @@ class Node:
             right_depth = self.right_child.max_depth_below()
         return max(left_depth, right_depth)
 
+    def count_nodes_below(self, only_leaves=False):
+        """Recursive node counter"""
+        if self.is_leaf:
+            return 1 if only_leaves else 1
+
+        left_count = self.left_child.count_nodes_below(only_leaves) \
+            if self.left_child else 0
+        right_count = self.right_child.count_nodes_below(only_leaves) \
+            if self.right_child else 0
+
+        if only_leaves:
+            return left_count + right_count
+        else:
+            return 1 + left_count + right_count
+
 
 class Leaf(Node):
     """A leaf node in a decision tree containing a value."""
@@ -48,6 +63,13 @@ class Leaf(Node):
     def max_depth_below(self):
         """Return the depth of this leaf."""
         return self.depth
+
+    def __init__(self):
+        super().__init__()
+        self.is_leaf = True
+
+    def count_nodes_below(self, only_leaves=False):
+        return 1 if only_leaves else 1
 
 
 class Decision_Tree:
@@ -72,14 +94,8 @@ class Decision_Tree:
         """Return the maximum depth of the tree."""
         return self.root.max_depth_below()
 
-    def count_nodes_below(self, only_leaves=False):
-        """Count Nodes"""
-        if self.is_leaf:
-            return 1
-        left_count = self.left_child.count_nodes_below(only_leaves) if self.left_child else 0
-        right_count = self.right_child.count_nodes_below(only_leaves) if self.right_child else 0
-
-        if only_leaves:
-            return left_count + right_count
-        else:
-            return 1 + left_count + right_count
+    def count_nodes(self, only_leaves=False):
+        """Count nodes from the root"""
+        if not self.root:
+            return 0
+        return self.root.count_nodes_below(only_leaves)
