@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Decision Tree and Random Forest implementation with Node and Leaf classes."""
+"""
+Decision Tree and Random Forest implementation
+with Node and Leaf classes.
+"""
 
 import numpy as np
 
@@ -7,9 +10,8 @@ import numpy as np
 class Node:
     """A decision tree node which may have children and a split feature."""
 
-    def __init__(self, feature=None, threshold=None,
-                 left_child=None, right_child=None,
-                 is_root=False, depth=0):
+    def __init__(self, feature=None, threshold=None, left_child=None,
+                 right_child=None, is_root=False, depth=0):
         """Initialize a Node with optional children, split feature, and depth."""
         self.feature = feature
         self.threshold = threshold
