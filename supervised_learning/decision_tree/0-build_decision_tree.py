@@ -51,3 +51,8 @@ class Decision_Tree:
         self.target = None
         self.max_depth = max_depth
         self.min_pop = min_pop
+        self.split_criterion = split_criterion
+        self.predict = None
+
+    def depth(self):
+        return self.root.max_depth_below()
