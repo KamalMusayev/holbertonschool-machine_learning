@@ -7,8 +7,9 @@ import numpy as np
 class Node:
     """A decision tree node which may have children and a split feature."""
 
-    def __init__(self, feature=None, threshold=None, left_child=None,
-                 right_child=None, is_root=False, depth=0):
+    def __init__(self, feature=None, threshold=None,
+                 left_child=None, right_child=None,
+                 is_root=False, depth=0):
         """Initialize a Node with optional children, split feature, and depth."""
         self.feature = feature
         self.threshold = threshold
@@ -19,50 +20,10 @@ class Node:
         self.sub_population = None
         self.depth = depth
 
-    def max_depth_below(self):
-        """Return the maximum depth of nodes below (including self)."""
-        if self.is_leaf:
-            return self.depth
-        left_depth = self.left_child.max_depth_below() \
-            if self.left_child else self.depth
-        right_depth = self.right_child.max_depth_below() \
-            if self.right_child else self.depth
-        return max(left_depth, right_depth)
-
-
-class Leaf(Node):
-    """A leaf node in the decision tree holding a single prediction value."""
-
-    def __init__(self, value, depth=None):
-        """Initialize a Leaf with a prediction value and depth."""
-        super().__init__()
-        self.value = value
-        self.is_leaf = True
-        self.depth = depth
-
-    def max_depth_below(self):
-        """Return the depth of this leaf node."""
-        return self.depth
-
 
 class Decision_Tree:
     """Decision tree object containing the root node and tree parameters."""
 
     def __init__(self, max_depth=10, min_pop=1, seed=0,
                  split_criterion="random", root=None):
-        """Initialize a Decision_Tree with optional parameters and root node."""
-        self.rng = np.random.default_rng(seed)
-        if root:
-            self.root = root
-        else:
-            self.root = Node(is_root=True)
-        self.explanatory = None
-        self.target = None
-        self.max_depth = max_depth
-        self.min_pop = min_pop
-        self.split_criterion = split_criterion
-        self.predict = None
-
-    def depth(self):
-        """Return the maximum depth of the tree."""
-        return self.root.max_depth_below()
+        """Initialize
