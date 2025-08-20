@@ -66,18 +66,24 @@ class Node:
         return new_text
 
     def __str__(self):
-        """STR"""
-        node_type = "root" if self.is_root else "node"
-        text = f"{node_type} [feature={self.feature}, threshold={self.threshold}]"
-        if self.left_child:
-            left_str = str(self.left_child)
-            if left_str is not None:
-                text += "\n" + self.left_child_add_prefix(left_str)
-        if self.right_child:
-            right_str = str(self.right_child)
-            if right_str is not None:
-                text += "\n" + self.right_child_add_prefix(right_str)
-        return text
+    """STR"""
+    node_type = "root" if self.is_root else "node"
+    text = f"{node_type} [feature={self.feature}, threshold={self.threshold}]"
+
+    # Left child varsa və None deyil
+    if self.left_child is not None:
+        left_str = str(self.left_child)
+        if left_str is not None:
+            text += "\n" + self.left_child_add_prefix(left_str)
+
+    # Right child varsa və None deyil
+    if self.right_child is not None:
+        right_str = str(self.right_child)
+        if right_str is not None:
+            text += "\n" + self.right_child_add_prefix(right_str)
+
+    return text
+
 
 class Leaf(Node):
     """A leaf node in a decision tree containing a value."""
