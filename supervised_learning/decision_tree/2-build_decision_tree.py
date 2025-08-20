@@ -58,27 +58,26 @@ class Node:
         return new_text
 
     def right_child_add_prefix(self, text):
-        """Right Child"""
+        """Right child formatting without the vertical |"""
         lines = text.split("\n")
-        new_text = "    +---> " + lines[0] + "\n"
+        new_text = "    +--->" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += ("       " + x) + "\n"
+            new_text += "       " + x + "\n"
         return new_text
 
     def __str__(self):
         """STR"""
-        if self.is_root:
-            s = f"root [feature={self.feature}, threshold={self.threshold}]"
-        else:
-            s = f"node [feature={self.feature}, threshold={self.threshold}]"
-
+        node_type = "root" if self.is_root else "node"
+        text = f"{node_type} [feature={self.feature}, threshold={self.threshold}]"
         if self.left_child:
-            left_str = self.left_child.__str__()
-            s += "\n" + self.left_child_add_prefix(left_str).rstrip("\n")
-
+            left_str = str(self.left_child)
+            if left_str is not None:
+                text += "\n" + self.left_child_add_prefix(left_str)
         if self.right_child:
-            right_str = self.right_child.__str__()
-            s += "\n" + self.right_child_add_prefix(right_str).rstrip("\n")
+            right_str = str(self.right_child)
+            if right_str is not None:
+                text += "\n" + self.right_child_add_prefix(right_str)
+        return text
 
 class Leaf(Node):
     """A leaf node in a decision tree containing a value."""
@@ -100,7 +99,7 @@ class Leaf(Node):
 
     def __str__(self):
         """STR"""
-        return f"-> leaf [value={self.value}]"
+        return f"leaf [value={self.value}]"  # Leaf çıxışında artıq -> yoxdur
 
 class Decision_Tree:
     """Decision tree object containing the root node."""
