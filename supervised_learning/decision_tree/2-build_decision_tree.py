@@ -49,38 +49,36 @@ class Node:
         else:
             return 1 + left_count + right_count
 
-    def __str__(self):
-        """STR"""
-        if self.is_root:
-            s = f"root [feature={self.feature}, threshold={self.threshold}]"
-        else:
-            s = f"node [feature={self.feature}, threshold={self.threshold}]"
-
-        if self.left_child:
-            left_str = self.left_child.__str__()
-            s += "\n" + self.left_child_add_prefix(left_str).rstrip("\n")
-
-        if self.right_child:
-            right_str = self.right_child.__str__()
-            s += "\n" + self.right_child_add_prefix(right_str).rstrip("\n")
-
-        return s
 
     def left_child_add_prefix(self, text):
-        """Left child formatting"""
-        lines = text.split("\n")
-        new_text = "    +--->" + lines[0] + "\n"
-        for x in lines[1:]:
-            new_text += "    |  " + x + "\n"
-        return new_text
+    lines = text.split("\n")
+    new_text = "    +--" + lines[0] + "\n"
+    for x in lines[1:]:
+        new_text += "    |  " + x + "\n"
+    return new_text
 
     def right_child_add_prefix(self, text):
-        """Right child formatting without the vertical |"""
-        lines = text.split("\n")
-        new_text = "    +--->" + lines[0] + "\n"
-        for x in lines[1:]:
-            new_text += "       " + x + "\n"
-        return new_text
+    lines = text.split("\n")
+    new_text = "    +--" + lines[0] + "\n"
+    for x in lines[1:]:
+        new_text += "       " + x + "\n"
+    return new_text
+
+    def __str__(self):
+    if self.is_root:
+        s = f"root [feature={self.feature}, threshold={self.threshold}]"
+    else:
+        s = f"node [feature={self.feature}, threshold={self.threshold}]"
+
+    if self.left_child:
+        left_str = self.left_child.__str__()
+        s += "\n" + self.left_child_add_prefix(left_str).rstrip("\n")
+
+    if self.right_child:
+        right_str = self.right_child.__str__()
+        s += "\n" + self.right_child_add_prefix(right_str).rstrip("\n")
+
+    return s
 
 
 class Leaf(Node):
@@ -102,8 +100,7 @@ class Leaf(Node):
         return 1 if only_leaves else 1
 
     def __str__(self):
-        """STR"""
-        return f"leaf [value={self.value}]"  # Leaf çıxışında artıq -> yoxdur
+    return f"-> leaf [value={self.value}]"
 
 class Decision_Tree:
     """Decision tree object containing the root node."""
@@ -134,5 +131,4 @@ class Decision_Tree:
         return self.root.count_nodes_below(only_leaves)
 
     def __str__(self):
-        """STR"""
-        return self.root.__str__()
+    return self.root.__str__()
