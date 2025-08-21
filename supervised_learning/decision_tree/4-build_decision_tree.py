@@ -121,7 +121,6 @@ class Node:
                 child.update_bounds_below()
 
 
-
 class Leaf(Node):
     """Terminal node which is a leaf."""
 
