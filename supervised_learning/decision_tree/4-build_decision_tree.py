@@ -112,9 +112,9 @@ class Node:
             threshold = self.threshold
 
             if child is self.left_child:
-                child.upper[feature] = threshold
-            else:
                 child.lower[feature] = threshold
+            else:
+                child.upper[feature] = threshold
 
         for child in [self.left_child, self.right_child]:
             if child:
