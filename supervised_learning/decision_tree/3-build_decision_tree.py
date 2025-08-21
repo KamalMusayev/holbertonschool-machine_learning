@@ -113,15 +113,13 @@ class Leaf(Node):
         """Return the count of 1 leaf."""
         return 1
 
+    def __str__(self):
+        """STR"""
+        return f"-> leaf [value={self.value}]"
+
     def get_leaves_below(self):
         """Get Leaves"""
         return [self]
-
-    def __str__(self):
-        """STR"""
-    return f"-> leaf [value={self.value}]"
-
-
 
 class Decision_Tree():
     """The whole Decision Tree class."""
