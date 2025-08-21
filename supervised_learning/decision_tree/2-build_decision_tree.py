@@ -51,7 +51,7 @@ class Node:
             return 1 + left + right
 
     def __str__(self):
-        """Return an ASCII representation of the tree from this node."""
+        """STR"""
         if self.is_root:
             s = f"root [feature={self.feature}, threshold={self.threshold}]"
         else:
@@ -68,7 +68,7 @@ class Node:
         return s
 
     def left_child_add_prefix(self, text):
-        """Add ASCII branch prefixes for a left child in a tree diagram."""
+        """Left Child"""
         lines = text.split("\n")
         new_text = "    +---> " + lines[0] + "\n"
         for x in lines[1:]:
@@ -76,7 +76,7 @@ class Node:
         return new_text
 
     def right_child_add_prefix(self, text):
-        """Add ASCII branch prefixes for a right child in a tree diagram."""
+        """Right Child"""
         lines = text.split("\n")
         new_text = "    +---> " + lines[0] + "\n"
         for x in lines[1:]:
@@ -103,7 +103,7 @@ class Leaf(Node):
         return 1
 
     def __str__(self):
-        """Print the ASCII representation of a leaf."""
+        """STR"""
         return f"leaf [value={self.value}]"
 
 
@@ -134,5 +134,5 @@ class Decision_Tree():
         return self.root.count_nodes_below(only_leaves=only_leaves)
 
     def __str__(self):
-        """Print the whole tree in ASCII."""
+        """STR"""
         return self.root.__str__() + "\n"
