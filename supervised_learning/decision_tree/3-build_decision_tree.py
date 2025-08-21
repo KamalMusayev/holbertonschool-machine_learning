@@ -121,6 +121,7 @@ class Leaf(Node):
         """Get Leaves"""
         return [self]
 
+
 class Decision_Tree():
     """The whole Decision Tree class."""
 
