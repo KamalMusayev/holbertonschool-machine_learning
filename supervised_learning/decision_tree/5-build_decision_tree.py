@@ -125,10 +125,12 @@ class Node:
 
         def is_large_enough(x):
             """Large enough"""
-            return np.all([x[:, j] >= bound for j, bound in self.lower.items()], axis=0)
+            return np.all([x[:, j] >= bound 
+                           for j, bound in self.lower.items()], axis=0)
         def is_small_enough(x):
             """Small Enough"""
-            return np.all([x[:, j] <= bound for j, bound in self.upper.items()], axis=0)
+            return np.all([x[:, j] <= bound 
+                           for j, bound in self.upper.items()], axis=0)
         self.indicator = lambda x: np.all(np.array([is_large_enough(x), is_small_enough(x)]), axis=0)
 
 
