@@ -181,7 +181,7 @@ class Leaf(Node):
         pass
 
     def pred(self, x):
-        """Pred"""
+        """Return the prediction"""
         return self.value
 
 
@@ -224,11 +224,11 @@ class Decision_Tree():
         self.root.update_bounds_below()
 
     def pred(self, x):
-        """Pred"""
+        """Return the prediction"""
         return self.root.pred(x)
 
     def update_predict(self):
-        """Pred 2"""
+        """Return the prediction 2"""
         self.update_bounds()
         leaves = self.get_leaves()
         for leaf in leaves:
@@ -237,7 +237,7 @@ class Decision_Tree():
         self.predict = lambda A: self._predict_from_leaves(A, leaves)
 
     def _predict_from_leaves(self, A, leaves):
-        """Pred_"""
+        """Return the prediction __"""
         import numpy as np
         res = np.zeros(A.shape[0])
         for leaf in leaves:
