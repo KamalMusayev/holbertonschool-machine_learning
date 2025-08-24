@@ -333,82 +333,22 @@ class Decision_Tree():
         return (values[1:] + values[:-1]) / 2
 
     def Gini_split_criterion_one_feature(self, node, feature):
-        """Compute best threshold and Gini score for a single feature."""
-        # Get feature values and target values for individuals in this node
-        x_node = self.explanatory[node.sub_population, feature]
-        y_node = self.target[node.sub_population]
-
-        # Get possible thresholds
+        """Gini_split_criterion_one_feature"""
         thresholds = self.possible_thresholds(node, feature)
-
-        # If no valid thresholds (all values same), return high Gini
-        if len(thresholds) == 0:
-            return 0, np.inf
-
-        # Get unique classes in this node
-        classes = np.unique(y_node)
-
-        # Create Left_F array of shape (n, t, c) where:
-        # n = number of individuals in sub_population
-        # t = number of possible thresholds
-        # c = number of classes
-        # Left_F[i, j, k] = True iff i-th individual is of class k AND
-        #                   feature value > j-th threshold
-
-        # First create boolean arrays for each condition
-        # Shape: (n, t) - True if individual i has feature value > threshold j
-        feature_condition = x_node[:, np.newaxis] > thresholds[np.newaxis, :]
-
-        # Shape: (n, c) - True if individual i belongs to class k
-        class_condition = y_node[:, np.newaxis] == classes[np.newaxis, :]
-
-        # Combine conditions using broadcasting to get shape (n, t, c)
-        # Left_F[i, j, k] = feature_condition[i, j] AND class_condition[i, k]
-        Left_F = feature_condition[:, :, np.newaxis] &\
-            class_condition[:, np.newaxis, :]
-
-        feature_condition_right = x_node[:, np.newaxis]\
-            <= thresholds[np.newaxis, :]
-        Right_F = feature_condition_right[:, :, np.newaxis] &\
-            class_condition[:, np.newaxis, :]
-
-        # Sum over individuals (axis=0) to get class counts for each threshold
-        left_counts = Left_F.sum(axis=0)   # shape (t, c)
-        right_counts = Right_F.sum(axis=0)  # shape (t, c)
-
-        # Total individuals in left and right for each threshold
-        left_totals = left_counts.sum(axis=1)   # shape (t,)
-        right_totals = right_counts.sum(axis=1)  # shape (t,)
-
-        # Compute Gini impurity for left and right children
-        # Gini = 1 - sum(p_k^2) where p_k = class_count / total_count
-
-        # Handle empty children (avoid division by zero)
-        left_totals_safe = np.where(left_totals == 0, 1, left_totals)
-        right_totals_safe = np.where(right_totals == 0, 1, right_totals)
-
-        # Compute proportions
-        left_proportions = left_counts / left_totals_safe[:, np.newaxis]
-        right_proportions = right_counts / right_totals_safe[:, np.newaxis]
-
-        # Compute Gini impurity: 1 - sum(p_k^2)
-        left_gini = 1 - np.sum(left_proportions ** 2, axis=1)  # shape (t,)
-        right_gini = 1 - np.sum(right_proportions ** 2, axis=1)  # shape (t,)
-
-        # Set Gini to 0 for empty children (perfectly pure by definition)
-        left_gini = np.where(left_totals == 0, 0, left_gini)
-        right_gini = np.where(right_totals == 0, 0, right_gini)
-
-        # Compute weighted average Gini impurity for each threshold
-        total_size = left_totals + right_totals
-
-        # Weighted average
-        sum_gini = left_gini * left_totals + right_gini * right_totals
-        avg_gini = sum_gini / total_size
-
-        # Find threshold with minimum average Gini
+        y = self.response[node.sub_population]
+        Xf = self.explanatory[node.sub_population, feature]
+        classes = np.unique(y)
+        Left_F = (Xf[:, None, None] <= thresholds[None, :, None]) & (y[:, None, None] == classes[None, None, :])
+        Right_F = (Xf[:, None, None] > thresholds[None, :, None]) & (y[:, None, None] == classes[None, None, :])
+        left_counts = Left_F.sum(axis=0)
+        right_counts = Right_F.sum(axis=0)
+        left_gini = 1 - np.sum((left_counts / left_counts.sum(axis=1, keepdims=True)) ** 2, axis=1)
+        right_gini = 1 - np.sum((right_counts / right_counts.sum(axis=1, keepdims=True)) ** 2, axis=1)
+        left_weight = left_counts.sum(axis=1)
+        right_weight = right_counts.sum(axis=1)
+        total_weight = left_weight + right_weight
+        avg_gini = (left_weight / total_weight) * left_gini + (right_weight / total_weight) * right_gini
         best_idx = np.argmin(avg_gini)
-
         return thresholds[best_idx], avg_gini[best_idx]
 
     def Gini_split_criterion(self, node):
