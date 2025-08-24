@@ -25,22 +25,28 @@ class Node:
         """Find the maximum depth."""
         if self.is_leaf:
             return self.depth
-        left = self.left_child.max_depth_below() if self.left_child else self.depth
-        right = self.right_child.max_depth_below() if self.right_child else self.depth
+        left = self.left_child.max_depth_below() \
+            if self.left_child else self.depth
+        right = self.right_child.max_depth_below() \
+            if self.right_child else self.depth
         return max(left, right)
 
     def count_nodes_below(self, only_leaves=False):
-        """Count the number of nodes below, only leaves if specified."""
+        """Count the number of nodes below"""
         if self.is_leaf:
             return 1
 
         if only_leaves:
-            left = self.left_child.count_nodes_below(True) if self.left_child else 0
-            right = self.right_child.count_nodes_below(True) if self.right_child else 0
+            left = self.left_child.count_nodes_below(True) \
+                if self.left_child else 0
+            right = self.right_child.count_nodes_below(True) \
+                if self.right_child else 0
             return left + right
 
-        left = self.left_child.count_nodes_below(False) if self.left_child else 0
-        right = self.right_child.count_nodes_below(False) if self.right_child else 0
+        left = self.left_child.count_nodes_below(False) \
+            if self.left_child else 0
+        right = self.right_child.count_nodes_below(False) \
+            if self.right_child else 0
         return 1 + left + right
 
     def __str__(self):
