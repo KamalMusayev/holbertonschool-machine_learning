@@ -256,8 +256,8 @@ class Decision_Tree():
         """Recursively fit node and its children."""
         sub_target = self.target[node.sub_population]
         if (node.sub_population.sum() <= self.min_pop or
-            node.depth >= self.max_depth or
-            np.all(sub_target == sub_target[0])):
+                node.depth >= self.max_depth or
+                np.all(sub_target == sub_target[0])):
             node.value = np.bincount(sub_target).argmax()
             leaf = Leaf(node.value)
             leaf.depth = node.depth
@@ -274,55 +274,21 @@ class Decision_Tree():
         ))
 
         if (left_population.sum() <= self.min_pop or
-            node.depth + 1 >= self.max_depth or
-            np.all(self.target[left_population] ==
-                   self.target[left_population][0])):
+                node.depth + 1 >= self.max_depth or
+                np.all(self.target[left_population] ==
+                       self.target[left_population][0])):
             node.left_child = self.get_leaf_child(node, left_population)
         else:
             node.left_child = self.get_node_child(node, left_population)
             self.fit_node(node.left_child)
 
         if (right_population.sum() <= self.min_pop or
-            node.depth + 1 >= self.max_depth or
-            np.all(self.target[right_population] ==
-                   self.target[right_population][0])):
+                node.depth + 1 >= self.max_depth or
+                np.all(self.target[right_population] ==
+                       self.target[right_population][0])):
             node.right_child = self.get_leaf_child(node, right_population)
         else:
             node.right_child = self.get_node_child(node, right_population)
             self.fit_node(node.right_child)
 
-    def get_leaf_child(self, node, sub_population):
-        """Return a leaf node for a given subpopulation."""
-        value = np.bincount(self.target[sub_population]).argmax()
-        leaf_child = Leaf(value)
-        leaf_child.depth = node.depth + 1
-        leaf_child.sub_population = sub_population
-        return leaf_child
-
-    def get_node_child(self, node, sub_population):
-        """Return an internal node for a given subpopulation."""
-        n = Node()
-        n.depth = node.depth + 1
-        n.sub_population = sub_population
-        return n
-
-    def accuracy(self, test_explanatory, test_target):
-        """Compute accuracy on test data."""
-        return np.sum(self.predict(test_explanatory) == test_target) / \
-               test_target.size
-
-    def np_extrema(self, arr):
-        """Return min and max of an array."""
-        return np.min(arr), np.max(arr)
-
-    def random_split_criterion(self, node):
-        """Randomly select feature and threshold to split node."""
-        diff = 0
-        while diff == 0:
-            feature = self.rng.integers(0, self.explanatory.shape[1])
-            feature_values = self.explanatory[:, feature][node.sub_population]
-            feature_min, feature_max = self.np_extrema(feature_values)
-            diff = feature_max - feature_min
-        x = self.rng.uniform()
-        threshold = (1 - x) * feature_min + x * feature_max
-        return feature, threshold
+    def get_leaf_child(self, node, sub_population
