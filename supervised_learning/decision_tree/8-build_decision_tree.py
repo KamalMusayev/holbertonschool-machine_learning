@@ -350,17 +350,23 @@ class Decision_Tree():
                    (y[:, None, None] == classes[None, None, :]))
         left_counts = Left_F.sum(axis=0)
         right_counts = Right_F.sum(axis=0)
-        left_gini = 1 - np.sum((left_counts / left_counts.sum(axis=1, keepdims=True)) ** 2, axis=1)
-        right_gini = 1 - np.sum((right_counts / right_counts.sum(axis=1, keepdims=True)) ** 2, axis=1)
+        left_gini = 1 - np.sum((left_counts /
+                                left_counts.sum(axis=1, keepdims=True)) ** 2,
+                               axis=1)
+        right_gini = 1 - np.sum((right_counts /
+                                 right_counts.sum(axis=1, keepdims=True)) ** 2,
+                                axis=1)
         left_weight = left_counts.sum(axis=1)
         right_weight = right_counts.sum(axis=1)
         total_weight = left_weight + right_weight
-        avg_gini = ((left_weight / total_weight) * left_gini + (right_weight / total_weight) * right_gini)
+        avg_gini = ((left_weight / total_weight) * left_gini +
+                    (right_weight / total_weight) * right_gini)
         best_idx = np.argmin(avg_gini)
         return thresholds[best_idx], avg_gini[best_idx]
 
     def Gini_split_criterion(self, node):
         """Gini_split_criterion"""
-        X = np.array([self.Gini_split_criterion_one_feature(node, i) for i in range(self.explanatory.shape[1])])
+        X = np.array([self.Gini_split_criterion_one_feature(node, i)
+                      for i in range(self.explanatory.shape[1])])
         i = np.argmin(X[:, 1])
         return i, X[i, 0]
