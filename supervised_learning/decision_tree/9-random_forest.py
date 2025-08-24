@@ -371,13 +371,14 @@ class Decision_Tree():
         i = np.argmin(X[:, 1])
         return i, X[i, 0]
 
+
 class Random_Forest():
-    """Random Forest"""
-
-
+    """Random_Forest"""
+    
+    
     def __init__(self, n_trees=100, max_depth=10, min_pop=1, seed=0):
         """Init function"""
-        self.numpy_predicts = []   # Hər tree-in predict funksiyasını saxlayır
+        self.numpy_predicts = []
         self.target = None
         self.numpy_preds = None
         self.n_trees = n_trees
@@ -389,7 +390,7 @@ class Random_Forest():
         """Fit function"""
         self.target = target
         self.explanatory = explanatory
-        self.numpy_preds = []
+        self.numpy_predicts = []
 
         depths = []
         nodes = []
@@ -397,17 +398,27 @@ class Random_Forest():
         accuracies = []
 
         for i in range(n_trees):
-            T = Decision_Tree(max_depth=self.max_depth, min_pop=self.min_pop, seed=self.seed + i)
+            T = Decision_Tree(max_depth=self.max_depth,
+                              min_pop=self.min_pop,
+                              seed=self.seed + i)
             T.fit(explanatory, target)
-            self.numpy_preds.append(T.predict)
+            self.numpy_predicts.append(T.predict)
             depths.append(T.depth())
             nodes.append(T.count_nodes())
             leaves.append(T.count_nodes(only_leaves=True))
             accuracies.append(T.accuracy(T.explanatory, T.target))
 
+        if verbose == 1:
+            print(f"""  Training finished.
+    - Mean depth                     : {np.array(depths).mean()}
+    - Mean number of nodes           : {np.array(nodes).mean()}
+    - Mean number of leaves          : {np.array(leaves).mean()}
+    - Mean accuracy on training data : {np.array(accuracies).mean()}
+    - Accuracy of the forest on td   : {self.accuracy(self.explanatory, self.target)}""")
+
     def predict(self, explanatory):
-        """Predict Function"""
-        all_preds = np.array([tree(explanatory) for tree in self.numpy_preds])
+        """Predict function"""
+        all_preds = np.array([tree(explanatory) for tree in self.numpy_predicts])
         final_preds = []
         for i in range(explanatory.shape[0]):
             values, counts = np.unique(all_preds[:, i], return_counts=True)
@@ -415,4 +426,6 @@ class Random_Forest():
         return np.array(final_preds)
 
     def accuracy(self, test_explanatory, test_target):
-        return np.sum(np.equal(self.predict(test_explanatory), test_target)) / test_target.size
+        """Accuracy function"""
+        preds = self.predict(test_explanatory)
+        return np.sum(preds == test_target) / test_target.size
