@@ -3,8 +3,6 @@
 Decision Tree and Random Forest implementation
 with Node and Leaf classes.
 """
-from pyexpat import features
-
 import numpy as np
 
 
@@ -37,13 +35,16 @@ class Node:
             return 1
 
         if only_leaves:
-            left = self.left_child.count_nodes_below(True) if self.left_child else 0
-            right = self.right_child.count_nodes_below(True) if self.right_child else 0
+            left = (self.left_child.count_nodes_below(True)
+                    if self.left_child else 0)
+            right = (self.right_child.count_nodes_below(True)
+                     if self.right_child else 0)
             return left + right
-        else:
-            left = self.left_child.count_nodes_below(False) if self.left_child else 0
-            right = self.right_child.count_nodes_below(False) if self.right_child else 0
-            return 1 + left + right
+        left = (self.left_child.count_nodes_below(False)
+                if self.left_child else 0)
+        right = (self.right_child.count_nodes_below(False)
+                 if self.right_child else 0)
+        return 1 + left + right
 
     def __str__(self):
         """STR"""
@@ -98,14 +99,13 @@ class Node:
         for child in [self.left_child, self.right_child]:
             if not child:
                 continue
+
             child.lower = self.lower.copy()
             child.upper = self.upper.copy()
-            feature = self.feature
-            threshold = self.threshold
             if child is self.left_child:
-                child.lower[feature] = threshold
+                child.lower[self.feature] = self.threshold
             else:
-                child.upper[feature] = threshold
+                child.upper[self.feature] = self.threshold
 
         for child in [self.left_child, self.right_child]:
             if child:
@@ -125,15 +125,15 @@ class Node:
                           axis=0)
 
         self.indicator = lambda x: np.all(
-            np.array([is_large_enough(x), is_small_enough(x)]), axis=0
+            np.array([is_large_enough(x), is_small_enough(x)]),
+            axis=0
         )
 
     def pred(self, x):
         """Return the prediction"""
         if x[self.feature] > self.threshold:
             return self.left_child.pred(x)
-        else:
-            return self.right_child.pred(x)
+        return self.right_child.pred(x)
 
 
 class Leaf(Node):
@@ -178,10 +178,7 @@ class Decision_Tree():
                  split_criterion="random", root=None):
         """Construct the decision tree."""
         self.rng = np.random.default_rng(seed)
-        if root:
-            self.root = root
-        else:
-            self.root = Node(is_root=True)
+        self.root = root if root else Node(is_root=True)
         self.explanatory = None
         self.target = None
         self.max_depth = max_depth
@@ -214,17 +211,15 @@ class Decision_Tree():
         return self.root.pred(x)
 
     def update_predict(self):
-        """Return the prediction"""
+        """Return the prediction 2"""
         self.update_bounds()
         leaves = self.get_leaves()
         for leaf in leaves:
             leaf.update_indicator()
-        import numpy as np
         self.predict = lambda A: self._predict_from_leaves(A, leaves)
 
     def _predict_from_leaves(self, A, leaves):
-        """Return the prediction"""
-        import numpy as np
+        """Return the prediction __"""
         res = np.zeros(A.shape[0])
         for leaf in leaves:
             mask = leaf.indicator(A)
@@ -236,8 +231,6 @@ class Decision_Tree():
         self.target = target
         if self.split_criterion == "random":
             self.split_criterion = self.random_split_criterion
-        else:
-            self.split_criterion = self.Gini_split_criterion
         self.root.sub_population = np.ones_like(target, dtype=bool)
         self.fit_node(self.root)
         self.update_predict()
@@ -262,20 +255,22 @@ class Decision_Tree():
             leaf.sub_population = node.sub_population
             return leaf
         node.feature, node.threshold = self.split_criterion(node)
-        left_population = node.sub_population & \
-            (self.explanatory[:, node.feature] > node.threshold)
-        right_population = node.sub_population & \
-            (~(self.explanatory[:, node.feature] > node.threshold))
+        left_population = node.sub_population & (
+            self.explanatory[:, node.feature] > node.threshold)
+        right_population = node.sub_population & (~(
+            self.explanatory[:, node.feature] > node.threshold))
         if (left_population.sum() <= self.min_pop or
             node.depth + 1 >= self.max_depth or
-            np.all(self.target[left_population] == self.target[left_population][0])):
+            np.all(self.target[left_population] ==
+                   self.target[left_population][0])):
             node.left_child = self.get_leaf_child(node, left_population)
         else:
             node.left_child = self.get_node_child(node, left_population)
             self.fit_node(node.left_child)
         if (right_population.sum() <= self.min_pop or
             node.depth + 1 >= self.max_depth or
-            np.all(self.target[right_population] == self.target[right_population][0])):
+            np.all(self.target[right_population] ==
+                   self.target[right_population][0])):
             node.right_child = self.get_leaf_child(node, right_population)
         else:
             node.right_child = self.get_node_child(node, right_population)
@@ -298,20 +293,4 @@ class Decision_Tree():
 
     def accuracy(self, test_explanatory, test_target):
         """Compute accuracy on test data."""
-        return np.sum(self.predict(test_explanatory) == test_target) / test_target.size
-
-    def np_extrema(self, arr):
-        """Return min and max of an array."""
-        return np.min(arr), np.max(arr)
-
-    def random_split_criterion(self, node):
-        """Randomly select feature and threshold to split node."""
-        diff = 0
-        while diff == 0:
-            feature = self.rng.integers(0, self.explanatory.shape[1])
-            feature_values = self.explanatory[:, feature][node.sub_population]
-            feature_min, feature_max = self.np_extrema(feature_values)
-            diff = feature_max - feature_min
-        x = self.rng.uniform()
-        threshold = (1 - x) * feature_min + x * feature_max
-        return feature, threshold
+        return np.sum(self.predict(test_explanatory) ==
