@@ -143,7 +143,7 @@ class Node:
         )
 
     def pred(self, x):
-        """Pred"""
+        """Return the prediction"""
         if x[self.feature] > self.threshold:
             return self.left_child.pred(x)
         else:
