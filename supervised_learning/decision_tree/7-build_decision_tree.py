@@ -256,8 +256,8 @@ class Decision_Tree():
         """Recursively fit node and its children."""
         sub_target = self.target[node.sub_population]
         if (node.sub_population.sum() <= self.min_pop or
-            node.depth >= self.max_depth or
-            np.all(sub_target == sub_target[0])):
+                node.depth >= self.max_depth or
+                np.all(sub_target == sub_target[0])):
             node.value = np.bincount(sub_target).argmax()
             leaf = Leaf(node.value)
             leaf.depth = node.depth
@@ -309,7 +309,7 @@ class Decision_Tree():
     def accuracy(self, test_explanatory, test_target):
         """Compute accuracy on test data."""
         return np.sum(self.predict(test_explanatory) == test_target) / \
-               test_target.size
+            test_target.size
 
     def np_extrema(self, arr):
         """Return min and max of an array."""
