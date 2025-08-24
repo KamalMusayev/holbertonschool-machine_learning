@@ -149,6 +149,7 @@ class Node:
         else:
             return self.right_child.pred(x)
 
+
 class Leaf(Node):
     """Terminal node which is a leaf."""
 
@@ -179,7 +180,7 @@ class Leaf(Node):
         """Update Bounds"""
         pass
 
-    def pred(self,x) :
+    def pred(self, x):
         """Pred"""
         return self.value
 
