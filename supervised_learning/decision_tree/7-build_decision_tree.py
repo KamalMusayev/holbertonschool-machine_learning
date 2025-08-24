@@ -3,6 +3,8 @@
 Decision Tree and Random Forest implementation
 with Node and Leaf classes.
 """
+from pyexpat import features
+
 import numpy as np
 
 
@@ -25,8 +27,10 @@ class Node:
         """Find the maximum depth."""
         if self.is_leaf:
             return self.depth
-        left = self.left_child.max_depth_below() if self.left_child else self.depth
-        right = self.right_child.max_depth_below() if self.right_child else self.depth
+        left = self.left_child.max_depth_below()\
+            if self.left_child else self.depth
+        right = self.right_child.max_depth_below()\
+            if self.right_child else self.depth
         return max(left, right)
 
     def count_nodes_below(self, only_leaves=False):
@@ -35,16 +39,17 @@ class Node:
             return 1
 
         if only_leaves:
-            left = (self.left_child.count_nodes_below(True)
-                    if self.left_child else 0)
-            right = (self.right_child.count_nodes_below(True)
-                     if self.right_child else 0)
+            left = self.left_child.count_nodes_below(True)\
+                if self.left_child else 0
+            right = self.right_child.count_nodes_below(True)\
+                if self.right_child else 0
             return left + right
-        left = (self.left_child.count_nodes_below(False)
-                if self.left_child else 0)
-        right = (self.right_child.count_nodes_below(False)
-                 if self.right_child else 0)
-        return 1 + left + right
+        else:
+            left = self.left_child.count_nodes_below(False)\
+                if self.left_child else 0
+            right = self.right_child.count_nodes_below(False)\
+                if self.right_child else 0
+            return 1 + left + right
 
     def __str__(self):
         """STR"""
@@ -68,7 +73,7 @@ class Node:
         lines = text.split("\n")
         new_text = "    +---> " + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += "    |  " + x + "\n"
+            new_text += ("    |  " + x) + "\n"
         return new_text
 
     def right_child_add_prefix(self, text):
@@ -76,7 +81,7 @@ class Node:
         lines = text.split("\n")
         new_text = "    +---> " + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += "       " + x + "\n"
+            new_text += ("       " + x) + "\n"
         return new_text
 
     def get_leaves_below(self):
@@ -102,10 +107,14 @@ class Node:
 
             child.lower = self.lower.copy()
             child.upper = self.upper.copy()
+
+            feature = self.feature
+            threshold = self.threshold
+
             if child is self.left_child:
-                child.lower[self.feature] = self.threshold
+                child.lower[feature] = threshold
             else:
-                child.upper[self.feature] = self.threshold
+                child.upper[feature] = threshold
 
         for child in [self.left_child, self.right_child]:
             if child:
@@ -116,13 +125,17 @@ class Node:
 
         def is_large_enough(x):
             """Large enough"""
-            return np.all([x[:, j] >= bound for j, bound in self.lower.items()],
-                          axis=0)
+            return np.all(
+                [x[:, j] >= bound for j, bound in self.lower.items()],
+                axis=0
+            )
 
         def is_small_enough(x):
             """Small Enough"""
-            return np.all([x[:, j] <= bound for j, bound in self.upper.items()],
-                          axis=0)
+            return np.all(
+                [x[:, j] <= bound for j, bound in self.upper.items()],
+                axis=0
+            )
 
         self.indicator = lambda x: np.all(
             np.array([is_large_enough(x), is_small_enough(x)]),
@@ -133,7 +146,8 @@ class Node:
         """Return the prediction"""
         if x[self.feature] > self.threshold:
             return self.left_child.pred(x)
-        return self.right_child.pred(x)
+        else:
+            return self.right_child.pred(x)
 
 
 class Leaf(Node):
@@ -147,7 +161,7 @@ class Leaf(Node):
         self.depth = depth
 
     def max_depth_below(self):
-        """Return the depth of the leaf."""
+        """Retur the depth of the leaf."""
         return self.depth
 
     def count_nodes_below(self, only_leaves=False):
@@ -178,7 +192,10 @@ class Decision_Tree():
                  split_criterion="random", root=None):
         """Construct the decision tree."""
         self.rng = np.random.default_rng(seed)
-        self.root = root if root else Node(is_root=True)
+        if root:
+            self.root = root
+        else:
+            self.root = Node(is_root=True)
         self.explanatory = None
         self.target = None
         self.max_depth = max_depth
@@ -216,10 +233,12 @@ class Decision_Tree():
         leaves = self.get_leaves()
         for leaf in leaves:
             leaf.update_indicator()
+        import numpy as np
         self.predict = lambda A: self._predict_from_leaves(A, leaves)
 
     def _predict_from_leaves(self, A, leaves):
         """Return the prediction __"""
+        import numpy as np
         res = np.zeros(A.shape[0])
         for leaf in leaves:
             mask = leaf.indicator(A)
@@ -231,6 +250,8 @@ class Decision_Tree():
         self.target = target
         if self.split_criterion == "random":
             self.split_criterion = self.random_split_criterion
+        else:
+            self.split_criterion = self.Gini_split_criterion
         self.root.sub_population = np.ones_like(target, dtype=bool)
         self.fit_node(self.root)
         self.update_predict()
@@ -238,10 +259,8 @@ class Decision_Tree():
             print(f"  Training finished.\n"
                   f"    - Depth                     : {self.depth()}\n"
                   f"    - Number of nodes           : {self.count_nodes()}\n"
-                  f"    - Number of leaves          : "
-                  f"{self.count_nodes(only_leaves=True)}\n"
-                  f"    - Accuracy on training data : "
-                  f"{self.accuracy(self.explanatory, self.target)}")
+                  f"    - Number of leaves          : {self.count_nodes(only_leaves=True)}\n"
+                  f"    - Accuracy on training data : {self.accuracy(self.explanatory, self.target)}")
 
     def fit_node(self, node):
         """Recursively fit node and its children."""
@@ -255,22 +274,18 @@ class Decision_Tree():
             leaf.sub_population = node.sub_population
             return leaf
         node.feature, node.threshold = self.split_criterion(node)
-        left_population = node.sub_population & (
-            self.explanatory[:, node.feature] > node.threshold)
-        right_population = node.sub_population & (~(
-            self.explanatory[:, node.feature] > node.threshold))
+        left_population = node.sub_population & (self.explanatory[:, node.feature] > node.threshold)
+        right_population = node.sub_population & (~(self.explanatory[:, node.feature] > node.threshold))
         if (left_population.sum() <= self.min_pop or
             node.depth + 1 >= self.max_depth or
-            np.all(self.target[left_population] ==
-                   self.target[left_population][0])):
+            np.all(self.target[left_population] == self.target[left_population][0])):
             node.left_child = self.get_leaf_child(node, left_population)
         else:
             node.left_child = self.get_node_child(node, left_population)
             self.fit_node(node.left_child)
         if (right_population.sum() <= self.min_pop or
             node.depth + 1 >= self.max_depth or
-            np.all(self.target[right_population] ==
-                   self.target[right_population][0])):
+            np.all(self.target[right_population] == self.target[right_population][0])):
             node.right_child = self.get_leaf_child(node, right_population)
         else:
             node.right_child = self.get_node_child(node, right_population)
@@ -293,4 +308,20 @@ class Decision_Tree():
 
     def accuracy(self, test_explanatory, test_target):
         """Compute accuracy on test data."""
-        return np.sum(self.predict(test_explanatory) ==
+        return np.sum(self.predict(test_explanatory) == test_target) / test_target.size
+
+    def np_extrema(self, arr):
+        """Return min and max of an array."""
+        return np.min(arr), np.max(arr)
+
+    def random_split_criterion(self, node):
+        """Randomly select feature and threshold to split node."""
+        diff = 0
+        while diff == 0:
+            feature = self.rng.integers(0, self.explanatory.shape[1])
+            feature_values = self.explanatory[:, feature][node.sub_population]
+            feature_min, feature_max = self.np_extrema(feature_values)
+            diff = feature_max - feature_min
+        x = self.rng.uniform()
+        threshold = (1 - x) * feature_min + x * feature_max
+        return feature, threshold
