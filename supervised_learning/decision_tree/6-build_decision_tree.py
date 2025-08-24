@@ -142,13 +142,12 @@ class Node:
             axis=0
         )
 
-        def pred(self, x):
-            """Pred"""
-            if x[self.feature] > self.threshold:
-                return self.left_child.pred(x)
-            else:
-                return self.right_child.pred(x)
-
+    def pred(self, x):
+        """Pred"""
+        if x[self.feature] > self.threshold:
+            return self.left_child.pred(x)
+        else:
+            return self.right_child.pred(x)
 
 class Leaf(Node):
     """Terminal node which is a leaf."""
