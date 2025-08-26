@@ -8,7 +8,6 @@ import numpy as np
 class Neuron:
     """Neuron Class"""
 
-
     def __init__(self, nx):
         """Init Function"""
         if type(nx) is not int:
