@@ -6,6 +6,7 @@
 
 import numpy as np
 
+
 class Neuron:
     """Neuron Class"""
 
