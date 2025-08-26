@@ -49,7 +49,8 @@ class Neuron:
         return J
 
     def evaluate(self, X, Y):
-        """Evulate Prediction"""
+        """Evaluate Prediction"""
         A = self.forward_prop(X)
         pred = np.where(A >= 0.5 ,1, 0)
-        return pred
+        cost = self.cost(Y, A)
+        return pred, cost
