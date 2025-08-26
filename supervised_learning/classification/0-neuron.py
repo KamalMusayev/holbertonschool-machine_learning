@@ -9,7 +9,7 @@ class Neuron:
     """Neuron Class"""
 
 
-    def __init__(self, nx, W, b, A):
+    def __init__(self, nx):
         """Init Function"""
         if type(nx) is not int:
             raise TypeError("nx must be an integer")
