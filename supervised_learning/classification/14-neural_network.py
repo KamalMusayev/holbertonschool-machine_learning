@@ -103,5 +103,5 @@ class NeuralNetwork:
             raise ValueError("alpha must be positive")
         for iteration in range(iterations):
             A1, A2 = self.forward_prop(X)
-            self.gradient_descent(X, Y, A2, alpha)
+            self.gradient_descent(X, Y, A1, A2, alpha)
         return self.evaluate(X, Y)
