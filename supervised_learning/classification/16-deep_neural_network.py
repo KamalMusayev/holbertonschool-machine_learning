@@ -6,9 +6,9 @@
 
 import numpy as np
 
-
 class DeepNeuralNetwork:
-   def __init__(self, nx, layers):
+   """Deep Neural Network"""
+    def __init__(self, nx, layers):
         """Init Function"""
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
