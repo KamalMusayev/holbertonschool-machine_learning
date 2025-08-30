@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+
 """Classification"""
+
 
 import numpy as np
 
@@ -90,19 +92,16 @@ class NeuralNetwork:
         self.__b2 -= alpha * db2
 
     def train(self, X, Y, iterations=5000, alpha=0.05):
-        """Train the neural network."""
-        if not isinstance(iterations, int):
+        """Train Function"""
+        if type(iterations) is not int:
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
             raise ValueError("iterations must be a positive integer")
-        if not isinstance(alpha, float):
+        if type(alpha) is not float:
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
-
         for _ in range(iterations):
             A1, A2 = self.forward_prop(X)
             self.gradient_descent(X, Y, A1, A2, alpha)
-        self.forward_prop(X)
-
         return self.evaluate(X, Y)
