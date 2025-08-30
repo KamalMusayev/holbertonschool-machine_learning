@@ -10,20 +10,21 @@ import numpy as np
 class DeepNeuralNetwork:
     def __init__(self, nx, layers):
         """Init Function"""
-        if type(nx) is not int:
+        if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
         if nx < 1:
             raise ValueError("nx must be a positive integer")
-        if type(layers) is not list or len(layers) == 0:
+        if not isinstance(layers, list) or len(layers) == 0:
             raise TypeError("layers must be a list of positive integers")
-        if not all(isinstance(x, int) and x > 0 for x in layers):
-            raise TypeError("layers must be a list of positive integers")
-        self.__L = len(layers)
-        self.__cache = {}
-        self.__weights = {}
+        self.L = len(layers)
+        self.cache = {}
+        self.weights = {}
+        prev_nodes = nx
 
-        for l in range(self.__L):
-            nodes = layers[l]
-            prev_nodes = nx if l == 0 else layers[l - 1]
-            self.__weights["W" + str(l + 1)] = np.random.randn(nodes, prev_nodes) * np.sqrt(2 / prev_nodes)
-            self.__weights["b" + str(l + 1)] = np.zeros((nodes, 1))
+        for l, nodes in enumerate(layers, 1):
+            if not isinstance(nodes, int) or nodes <= 0:
+                raise TypeError("layers must be a list of positive integers")
+
+            self.weights["W" + str(l)] = np.random.randn(nodes, prev_nodes) * np.sqrt(2 / prev_nodes)
+            self.weights["b" + str(l)] = np.zeros((nodes, 1))
+            prev_nodes = nodes
