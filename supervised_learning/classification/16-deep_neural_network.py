@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-
-
-"""Classification"""
-
-
+"""Classification algorithm using Deep Neural Network (DNN class)."""
 import numpy as np
 
+
 class DeepNeuralNetwork:
-   """Deep Neural Network"""
+    """Deep Neural Network class."""
+
     def __init__(self, nx, layers):
         """Init Function"""
         if not isinstance(nx, int):
@@ -20,13 +18,15 @@ class DeepNeuralNetwork:
         self.L = len(layers)
         self.cache = {}
         self.weights = {}
-        prev_nodes = nx
 
-        for layer_idx, nodes in enumerate(layers, 1):
-            if not isinstance(nodes, int) or nodes <= 0:
+        for i in range(self.L):
+            if not isinstance(layers[i], int) or layers[i] <= 0:
                 raise TypeError("layers must be a list of positive integers")
 
-            self.weights["W" + str(layer_idx)] = np.random.randn(
-                nodes, prev_nodes) * np.sqrt(2 / prev_nodes)
-            self.weights["b" + str(layer_idx)] = np.zeros((nodes, 1))
-            prev_nodes = nodes
+            nodes = layers[i]
+            prev_nodes = nx if i == 0 else layers[i - 1]
+
+            self.weights["W{}".format(i + 1)] = (
+                np.random.randn(nodes, prev_nodes) * np.sqrt(2 / prev_nodes)
+            )
+            self.weights["b{}".format(i + 1)] = np.zeros((nodes, 1))
