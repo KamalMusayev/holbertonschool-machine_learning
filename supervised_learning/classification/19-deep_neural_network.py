@@ -61,5 +61,5 @@ class DeepNeuralNetwork:
     def cost(self, Y, A):
         """Cost Function"""
         m = Y.shape[1]
-        J = -(1 / m) * np.sum(Y * np.log(Y) + (1 - Y) * np.log(1.0000001 - A))
+        J = -(1 / m) * np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
         return J
