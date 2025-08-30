@@ -105,7 +105,7 @@ class NeuralNetwork:
         if verbose or graph:
             if type(step) is not int:
                 raise TypeError("step must be an integer")
-            if step <= 0 and step <= iterations:
+            if step <= 0 or step > iterations:
                 raise ValueError("step must be positive and <= iterations")
         costs = []
         steps = []
@@ -118,7 +118,7 @@ class NeuralNetwork:
                     print(f"Cost after {iteration} iterations: {cost}")
                 if graph:
                     costs.append(cost)
-                    steps.append(step)
+                    steps.append(iteration)
         if graph:
             plt.plot(steps, costs, 'b-')
             plt.xlabel("iteration")
