@@ -8,7 +8,6 @@ import numpy as np
 def one_hot_decode(one_hot):
     """One-Hot Decode Function"""
     try:
-        one_hot_decode = np.argmax(one_hot, axis=0)
-        return one_hot_decode
+        return np.argmax(one_hot, axis=0)
     except Exception:
         return None
