@@ -13,4 +13,4 @@ def one_hot_encode(Y, classes):
         one_hot[Y, np.arange(m)] = 1
         return one_hot
     except Exception:
-        None
+        return None
