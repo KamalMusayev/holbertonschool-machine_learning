@@ -114,7 +114,7 @@ class DeepNeuralNetwork:
         for iteration in range(iterations + 1):
             cache_l, cache = self.forward_prop(X)
             self.gradient_descent(Y, cache, alpha)
-            if iteration % step == 0 and iteration == iterations:
+            if iteration % step == 0 or iteration == iterations:
                 cost = self.cost(Y, cache_l)
                 costs.append(cost)
                 steps.append(iteration)
