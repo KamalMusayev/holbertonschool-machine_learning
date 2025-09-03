@@ -72,16 +72,17 @@ class DeepNeuralNetwork:
     def cost(self, Y, A):
       """Cost Function for multiclass classification"""
       m = Y.shape[1]
-      cost = -np.sum(Y * np.log(A + 1e-8)) / m
-      return cost
+        cost = -((1/m)*(
+            np.sum((1 - Y) * np.log(1.0000001 - A) + Y * np.log(A))
+        ))
+        return cost
 
     def evaluate(self, X, Y):
-        A, _ = self.forward_prop(X)
-        predictions = np.argmax(A, axis=0)
-        Y_true = np.argmax(Y, axis=0)
-        accuracy = np.mean(predictions == Y_true)
-        cost = self.cost(Y, A)
-        return (predictions == Y_true).astype(int), cost
+        """Evaluate"""
+        Al, _ = self.forward_prop(X)
+        predictions = np.where(Al >= 0.5, 1, 0)
+        cost = self.cost(Y, Al)
+        return predictions, cost
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """Gradient descent Function"""
@@ -89,14 +90,14 @@ class DeepNeuralNetwork:
         AL = cache['A{}'.format(self.__L)]
         dZl = AL - Y
         for i in range(self.__L, 0, -1):
-            Al = cache['A{}'.format(i - 1)]
+            Al = cache['A{}'.format(i-1)]
             dwl = (dZl @ Al.T) / m
-            dbl = np.sum(dZl, axis=1, keepdims=True) / m
+            dbl = (np.sum(dZl, axis=1, keepdims=True)) / m
 
-            Al_prev = cache['A{}'.format(i - 1)]
+            Al_prev = cache['A{}'.format(i-1)]
             Wl = self.__weights['W{}'.format(i)]
             if i > 1:
-                dZl = (Wl.T @ dZl) * (Al_prev * (1 - Al_prev))
+                dZl = (Wl.T @ dZl) * (Al_prev * (1-Al_prev))
             self.__weights['W{}'.format(i)] -= alpha * dwl
             self.__weights['b{}'.format(i)] -= alpha * dbl
 
