@@ -76,12 +76,12 @@ class DeepNeuralNetwork:
       return cost
 
     def evaluate(self, X, Y):
-      """Evaluate"""
-      A, _ = self.forward_prop(X)
-      predictions = np.argmax(A, axis=0)
-      labels = np.argmax(Y, axis=0)
-      cost = self.cost(Y, A)
-      return predictions, cost
+        A, _ = self.forward_prop(X)
+        predictions = np.argmax(A, axis=0)
+        Y_true = np.argmax(Y, axis=0)
+        accuracy = np.mean(predictions == Y_true)
+        cost = self.cost(Y, A)
+        return (predictions == Y_true).astype(int), cost
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """Gradient descent Function"""
