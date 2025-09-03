@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Classification algorithm using Deep Neural Network (DNN class)."""
+"""This module includes the class DeepNeuralNetwork"""
 
-import os.path
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 import pickle
 
 
 class DeepNeuralNetwork:
-    """Deep Neural Network class."""
+    """This class is for implementing
+     multi-layered(more than two) Neural Networks"""
 
     def __init__(self, nx, layers):
-        """Construct the deep neural network object."""
+        """Initialising the Deep Neural Network"""
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
         if nx < 1:
@@ -23,35 +24,42 @@ class DeepNeuralNetwork:
         self.__cache = {}
         self.__weights = {}
 
-        for i in range(self.L):
-            if not isinstance(layers[i], int) or layers[i] <= 0:
+        for lx in range(1, self.__L + 1):
+            # Validate each layer element during the loop
+            if not isinstance(layers[lx - 1], int) or layers[lx - 1] <= 0:
                 raise TypeError("layers must be a list of positive integers")
 
-            nodes = layers[i]
-            prev_nodes = nx if i == 0 else layers[i - 1]
+            if lx == 1:
+                previous_nodes = nx
+            else:
+                previous_nodes = layers[lx - 2]
 
-            self.__weights["W{}".format(i + 1)] = (
-                np.random.randn(nodes, prev_nodes) * np.sqrt(2 / prev_nodes)
+            self.weights['W' + str(lx)] = (
+                np.random.randn(layers[lx - 1], previous_nodes) *
+                np.sqrt(2 / previous_nodes)
             )
-            self.__weights["b{}".format(i + 1)] = np.zeros((nodes, 1))
+            self.weights['b' + str(lx)] = np.zeros((layers[lx - 1], 1))
 
     @property
     def L(self):
-        """Getter Method"""
+        """getter for number of layers in the DNN"""
         return self.__L
 
     @property
     def cache(self):
-        """Getter Method"""
+        """getter method for
+        intermediary values of the DNN"""
         return self.__cache
 
     @property
     def weights(self):
-        """Getter Method"""
+        """getter method for weights
+        and biases of the DNN"""
         return self.__weights
 
     def forward_prop(self, X):
-        """Forward propagation"""
+        """Calculate forward propagation of the neural network."""
+        self.__cache['A0'] = X
         for i in range(1, self.__L + 1):
             W = self.__weights['W{}'.format(i)]
             A = self.__cache['A{}'.format(i-1)]
@@ -68,13 +76,13 @@ class DeepNeuralNetwork:
         return self.__cache['A{}'.format(self.__L)], self.__cache
 
     def cost(self, Y, A):
-        """Cost Function for multiclass classification"""
-         m = Y.shape[1]
+        """Calculate the cost of the model using logistic regression."""
+        m = Y.shape[1]
         cost = -np.sum(Y * np.log(A + 1e-15)) / m
         return cost
 
     def evaluate(self, X, Y):
-        """Evaluate"""
+        """Evaluate the neural network's predictions."""
         self.forward_prop(X)
         A = self.__cache['A{}'.format(self.__L)]
         cost = self.cost(Y, A)
@@ -86,27 +94,25 @@ class DeepNeuralNetwork:
         return predictions, cost
 
     def gradient_descent(self, Y, cache, alpha=0.05):
-        """Gradient descent Function"""
+        """Calculate one pass of gradient descent on the neural network."""
         m = Y.shape[1]
         AL = cache['A{}'.format(self.__L)]
         dZl = AL - Y
         for i in range(self.__L, 0, -1):
-            Al = cache['A{}'.format(i - 1)]
+            Al = cache['A{}'.format(i-1)]
             dwl = (dZl @ Al.T) / m
             dbl = (np.sum(dZl, axis=1, keepdims=True)) / m
 
-            Al_prev = cache['A{}'.format(i - 1)]
+            Al_prev = cache['A{}'.format(i-1)]
             Wl = self.__weights['W{}'.format(i)]
             if i > 1:
-                dZl = (Wl.T @ dZl) * (Al_prev * (1 - Al_prev))
+                dZl = (Wl.T @ dZl) * (Al_prev * (1-Al_prev))
             self.__weights['W{}'.format(i)] -= alpha * dwl
             self.__weights['b{}'.format(i)] -= alpha * dbl
 
-    def train(
-        self, X, Y, iterations=5000, alpha=0.05,
-        verbose=True, graph=True, step=100
-    ):
-        """Train Function"""
+    def train(self, X, Y, iterations=5000, alpha=0.05,
+              verbose=True, graph=True, step=100):
+        """Trains the deep neural network"""
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
@@ -144,7 +150,7 @@ class DeepNeuralNetwork:
         return self.evaluate(X, Y)
 
     def save(self, filename):
-        """Save Function"""
+        """Saves the instance object to a file in pickle format"""
         if not filename.endswith(".pkl"):
             filename += ".pkl"
         with open(filename, "wb") as f:
@@ -153,7 +159,7 @@ class DeepNeuralNetwork:
 
     @staticmethod
     def load(filename):
-        """Load Function"""
+        """Loads a pickled DeepNeuralNetwork object"""
         if not os.path.exists(filename):
             return None
         with open(filename, "rb") as f:
