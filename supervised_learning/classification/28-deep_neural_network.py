@@ -66,12 +66,10 @@ class DeepNeuralNetwork:
             z = np.dot(W, A) + b
 
             if i == self.__L:
-                # Softmax activation for output layer (multiclass)
                 exp_z = np.exp(z - np.max(z, axis=0, keepdims=True))
                 self.__cache['A{}'.format(i)] = \
                     exp_z / np.sum(exp_z, axis=0, keepdims=True)
             else:
-                # Use specified activation function for hidden layers
                 if self.__activation == 'sig':
                     self.__cache['A{}'.format(i)] = 1 / (1 + np.exp(-z))
                 elif self.__activation == 'tanh':
@@ -90,8 +88,6 @@ class DeepNeuralNetwork:
         self.forward_prop(X)
         A = self.__cache['A{}'.format(self.__L)]
         cost = self.cost(Y, A)
-
-        # Convert predictions to class labels (one-hot format)
         predictions = np.zeros_like(A)
         max_indices = np.argmax(A, axis=0)
         predictions[max_indices, np.arange(A.shape[1])] = 1
@@ -112,9 +108,9 @@ class DeepNeuralNetwork:
                 dz = A - Y
             else:
                 if self.activation == 'sig':
-                    dz = da * (A * (1 - A))  # sigmoid derivative
+                    dz = da * (A * (1 - A))
                 elif self.activation == 'tanh':
-                    dz = da * (1 - A**2)  # tanh derivative
+                    dz = da * (1 - A**2)
 
             db = dz.mean(axis=1, keepdims=True)
             dw = np.matmul(dz, A_prev.T) / m
