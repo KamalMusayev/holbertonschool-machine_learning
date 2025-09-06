@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Classification algorithm using Deep Neural Network (DNN class)."""
+"""Sequential Class"""
 import tensorflow.keras as k
 
 
