@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Outside of Function"""
 import tensorflow.keras as K
-from tensorflow.python.keras.saving.saved_model.load import metrics
 
 
 def optimize_model(network, alpha, beta1, beta2):
