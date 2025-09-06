@@ -9,5 +9,5 @@ def save_model(network, filename):
 
 def load_model(filename):
     """Load Model Function"""
-    model = K.model.load_model(filename)
+    model = K.models.load_model(filename)
     return model
