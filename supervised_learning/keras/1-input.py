@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Input Class"""
 import tensorflow.keras as K
-from keras.src.layers import Dropout
 
 
 def build_model(nx, layers, activations, lambtha, keep_prob):
@@ -15,7 +14,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
                            activation = activations[i],
                            kernel_regularizer = regularizer)(x)
         if i < len(layers) - 1:
-            x = K.layers>Dropout(rate=drop)(x)
+            x = K.layers.Dropout(rate=drop)(x)
 
     model = K.models.Model(inputs=input_model, outputs=x)
     return model
