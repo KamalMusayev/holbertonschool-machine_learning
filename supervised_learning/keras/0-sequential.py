@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
 """Classification algorithm using Deep Neural Network (DNN class)."""
-import tensorflow.keras as K
+import tensorflow.keras as k
 
 
 def build_model(nx, layers, activations, lambtha, keep_prob):
     """Build Model Function"""
-    model = K.Sequential()
-    model.add(K.layers.Dense(layers[0],
-                             activation=activations[0],
-                             kernel_regularizer=K.regularizers.l2(lambtha),
-                             input_shape=(nx,)))
+    model = k.Sequential()
+    regularizer = k.regularizers.L2(lambtha)
+    drop = 1 - keep_prob
 
-    if keep_prob < 1:
-        model.add(K.layers.Dropout(1 - keep_prob))
+    for i in range(len(layers)):
+        if i == 0:
+            model.add(k.layers.Dense(
+                units=layers[i],
+                activation=activations[i],
+                kernel_regularizer=regularizer,
+                input_shape=(nx,)))
+        else:
+            model.add(k.layers.Dense(
+                units=layers[i],
+                activation=activations[i],
+                kernel_regularizer=regularizer))
 
-    for i in range(1, len(layers)):
-        model.add(K.layers.Dense(
-            layers[i],
-            activation=activations[i],
-            kernel_regularizer=K.regularizers.l2(lambtha)
-        ))
-        # Add dropout only after hidden layers, not the output layer
-        if i < len(layers) - 1 and keep_prob < 1:
-            model.add(K.layers.Dropout(1 - keep_prob))
+        if i < len(layers) - 1:
+            model.add(k.layers.Dropout(rate=drop))
     return model
