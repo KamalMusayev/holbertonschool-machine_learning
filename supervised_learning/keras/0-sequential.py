@@ -20,6 +20,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
             activation=activations[i],
             kernel_regularizer=K.regularizers.l2(lambtha)
         ))
+        # Add dropout only after hidden layers, not the output layer
         if i < len(layers) - 1 and keep_prob < 1:
             model.add(K.layers.Dropout(1 - keep_prob))
     return model
