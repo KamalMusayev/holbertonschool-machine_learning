@@ -2,6 +2,7 @@
 """Input Class"""
 import tensorflow.keras as K
 
+
 def build_model(nx, layers, activations, lambtha, keep_prob):
     """Build Model Function"""
     regularizer = K.regularizers.l2(lambtha)
