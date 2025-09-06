@@ -7,6 +7,7 @@ def save_model(network, filename):
     """Save Model Function"""
     network.save(filename)
 
+
 def load_model(filename):
     """Load Model Function"""
     model = K.models.load_model(filename)
