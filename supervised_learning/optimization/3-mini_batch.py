@@ -7,9 +7,7 @@ shuffle_data = __import__('2-shuffle_data').shuffle_data
 def create_mini_batches(X, Y, batch_size):
     """Mini Batches"""
     i = X.shape[0]
-    perm = np.random.permutation(i)
-    X_shuffled = X[perm]
-    Y_shuffled = Y[perm]
+    X_shuffled, Y_shuffled = shuffle_data(X, Y)
     mini_batch = []
     for first_ind in range(0, i, batch_size):
         last_ind = min(first_ind + batch_size, i)
