@@ -4,5 +4,5 @@ import tensorflow as tf
 
 def update_variables_momentum(alpha, beta1, var, grad, v):
     """Update Variables Momentum"""
-    optimizer = tf.compat.v1.train.MomentumOptimizer(learning_rate=alpha, momentum=beta1)
+    optimizer = tf.keras.optimizers.SGD.(learning_rate=alpha, momentum=beta1)
     return optimizer
