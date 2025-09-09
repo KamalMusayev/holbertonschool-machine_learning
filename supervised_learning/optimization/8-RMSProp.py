@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Comment of Function"""
-import numpy as np
 import tensorflow as tf
+
 
 def create_RMSProp_op(alpha, beta2, epsilon):
     """RMSProbFunction in TenserFlow"""
