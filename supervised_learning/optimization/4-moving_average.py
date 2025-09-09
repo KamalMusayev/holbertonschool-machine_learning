@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
+
 """Comment of Function"""
+
 import numpy as np
 
 
 def moving_average(data, beta):
     """Moving Average"""
-    weights = np.ones(beta) / beta
-    moving_avg = np.convolve(data, weights, mode='valid')
-    return moving_avg
+    mov_avg = []
+    for i in range(len(data) - beta + 1):
+        avg = np.mean(data[i: i + beta])
+        mov_avg.append(avg)
+    return np.array(mov_avg)
