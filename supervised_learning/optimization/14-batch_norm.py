@@ -13,7 +13,7 @@ def create_batch_norm_layer(prev, n, activation):
     )(prev)
 
     gamma = tf.Variable(tf.ones([n]), trainable=True)
-    beta = tf.Variable(tf.ones([n]), trainable=True)
+    beta = tf.Variable(tf.zeros([n]), trainable=True)
 
     mean, variance = tf.nn.moments(dense, axes=[0])
     epsilon = 1e-7
