@@ -1,4 +1,3 @@
-from re import M
 #!/usr/bin/env python3
 """Comment of Function"""
 import tensorflow as tf
