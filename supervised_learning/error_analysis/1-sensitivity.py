@@ -15,4 +15,4 @@ def sensitivity(confusion):
             sensitivities[i] = 0
         else:
             sensitivities[i] = TP / (TP + FN)
-        return sensitivities
+    return sensitivities
