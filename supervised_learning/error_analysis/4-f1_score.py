@@ -14,6 +14,6 @@ def f1_score(confusion):
         if precisions[i] + sensitivities[i] == 0:
             f1[i] = 0
         else:
-            f1 = ((2 * (precision[i] * sensitivity[i])) /
-                  (precision[i] + sensitivity[i]))
+            f1 = ((2 * (precisions[i] * sensitivities[i])) /
+                  (precisions[i] + sensitivities[i]))
     return f1
