@@ -7,6 +7,13 @@ def f1_score(confusion):
     """F1 Score"""
     sensitivity = __import__('1-sensitivity').sensitivity
     precision = __import__('2-precision').precision
-    f1 = ((2 * (precision * sensitivity)) /
-          (precision + sensitivity))
+    precisions = precision(confusion)
+    sensitivities = sensitivity(confusion)
+    f1 = np.zeros_like(precisions)
+    for i in range(len(precision)):
+        if precisions[i] + sensitivities[i] == 0:
+            f1[i] = 0
+        else:
+            f1 = ((2 * (precision[i] * sensitivity[i])) /
+                  (precision[i] + sensitivity[i]))
     return f1
