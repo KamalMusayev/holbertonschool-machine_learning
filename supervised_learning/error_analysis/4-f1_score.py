@@ -10,7 +10,7 @@ def f1_score(confusion):
     precisions = precision(confusion)
     sensitivities = sensitivity(confusion)
     f1 = np.zeros_like(precisions)
-    for i in range(len(precision)):
+    for i in range(len(precisions)):
         if precisions[i] + sensitivities[i] == 0:
             f1[i] = 0
         else:
