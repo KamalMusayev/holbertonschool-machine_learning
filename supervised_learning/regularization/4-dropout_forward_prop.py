@@ -12,13 +12,12 @@ def dropout_forward_prop(X, weights, L, keep_prob):
         A = cache["A{}".format(i - 1)]
         b = weights["b{}".format(i)]
         z = np.dot(W, A) + b
-        A = np.tanh(z)  # we compute A to match the shape with D
+        A = np.tanh(z)
         D = (np.random.rand(*A.shape) < keep_prob).astype(int)
         A = A * D / keep_prob
         cache["A{}".format(i)] = A
         cache["D{}".format(i)] = D
 
-    # last layer
     z = (np.dot(weights["W{}".format(L)], cache["A{}".format(L - 1)]) +
          weights["b{}".format(L)])
 
