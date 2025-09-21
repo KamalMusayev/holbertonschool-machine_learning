@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Comment of Function"""
-import numpy as np
+import tensorflow as tf
 
 
 def dropout_create_layer(prev, n, activation,
