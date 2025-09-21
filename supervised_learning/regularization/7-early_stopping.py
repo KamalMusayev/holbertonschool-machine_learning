@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Comment of Function"""
-import tensorflow as tf
 
 
 def early_stopping(cost, opt_cost, threshold, patience, count):
