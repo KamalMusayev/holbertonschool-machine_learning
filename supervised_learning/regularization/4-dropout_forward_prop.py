@@ -5,34 +5,24 @@ import numpy as np
 
 def dropout_forward_prop(X, weights, L, keep_prob):
     """Dropout Forward Propagation"""
-    np.random.seed(0)
     cache = {}
-    cache['A0'] = X
-    A = X
-    # Loop for hidden layers (1 to L-1)
-    for l in range(1, L):
-        A_prev = A
-        W = weights['W' + str(l)]
-        b = weights['b' + str(l)]
-        Z = np.dot(W, A_prev) + b
-        # All hidden layers use tanh activation
-        A = np.tanh(Z)
-        # Apply dropout to the hidden layer's activation
-        D = np.random.rand(A.shape[0], A.shape[1])
-        D = (D < keep_prob).astype(int)
-        A = A * D
-        A = A / keep_prob
-        cache['D' + str(l)] = D
-        cache['A' + str(l)] = A
+    cache["A0"] = X
+    for i in range(1, L):
+        W = weights["W{}".format(i)]
+        A = cache["A{}".format(i - 1)]
+        b = weights["b{}".format(i)]
+        z = np.dot(W, A) + b
+        A = np.tanh(z)  # we compute A to match the shape with D
+        D = (np.random.rand(*A.shape) < keep_prob).astype(int)
+        A = A * D / keep_prob
+        cache["A{}".format(i)] = A
+        cache["D{}".format(i)] = D
 
-    # Calculation for the output layer (L)
-    A_prev = A
-    W = weights['W' + str(L)]
-    b = weights['b' + str(L)]
-    Z = np.dot(W, A_prev) + b
-    # The output layer uses softmax activation
-    t = np.exp(Z)
-    A = t / np.sum(t, axis=0, keepdims=True)
-    cache['A' + str(L)] = A
+    # last layer
+    z = (np.dot(weights["W{}".format(L)], cache["A{}".format(L - 1)]) +
+         weights["b{}".format(L)])
 
+    exp_z = np.exp(z - np.max(z, axis=0, keepdims=True))
+    A = exp_z / np.sum(exp_z, axis=0, keepdims=True)
+    cache["A{}".format(L)] = A
     return cache
