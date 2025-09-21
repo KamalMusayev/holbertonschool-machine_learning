@@ -5,6 +5,7 @@ import numpy as np
 
 def dropout_forward_prop(X, weights, L, keep_prob):
     """Dropout Forward Propagation"""
+    np.random.seed(0)
     cache = {}
     cache["A0"] = X
     A_prev = X
