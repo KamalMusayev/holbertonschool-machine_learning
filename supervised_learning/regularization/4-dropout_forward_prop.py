@@ -21,10 +21,9 @@ def dropout_forward_prop(X, weights, L, keep_prob):
         cache["D" + str(l)] = D
         A_prev = A
 
-        WL = weights["W" + str(L)]
-        bL = weights["b" + str(L)]
-        ZL = np.dot(WL, A_prev) + bL
-        AL = np.exp(ZL) / np.sum(np.exp(ZL), axis=0, keepdims=True)
-        cache["A" + str(L)] = AL
-
-        return cache
+    WL = weights["W" + str(L)]
+    bL = weights["b" + str(L)]
+    ZL = np.dot(WL, A_prev) + bL
+    AL = np.exp(ZL) / np.sum(np.exp(ZL), axis=0, keepdims=True)
+    cache["A" + str(L)] = AL
+    return cache
