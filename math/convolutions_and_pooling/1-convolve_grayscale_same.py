@@ -4,7 +4,7 @@ import numpy as np
 
 
 def convolve_grayscale_same(images, kernel):
-    """Convolve Grayscale Valid"""
+    """Convolve Grayscale Same"""
     m, h, w = images.shape
     kh, kw = kernel.shape
     ph_top = kh // 2
