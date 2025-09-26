@@ -20,7 +20,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
 
     images_padded = np.pad(
         images,
-        pad_width=((0, 0), (ph, ph), (pw, pw), (0,0)),
+        pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
         mode='constant',
         constant_values=0
     )
