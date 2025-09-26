@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Comment of Function"""
 import numpy as np
-from PIL.ImageChops import constant
 
 
 def convolve_grayscale_padding(images, kernel, padding):
