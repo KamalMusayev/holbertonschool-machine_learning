@@ -33,7 +33,6 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
                     horiz_start = w * sw
                     horiz_end = horiz_start + kw
 
-                    slice_ = A_prev_pad[i, vert_start:vert_end,
                     slice = A_prev_pad[i, vert_start:vert_end,
                                        horiz_start:horiz_end, :]
 
