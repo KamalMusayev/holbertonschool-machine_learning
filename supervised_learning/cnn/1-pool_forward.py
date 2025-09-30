@@ -20,7 +20,7 @@ def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
                     hor_start = w * sw
                     hor_end = hor_start + kw
                     patch = A_prev[i, vert_start:vert_end,
-                                    hor_start:hor_end, c]
+                                   hor_start:hor_end, c]
                     if mode == "max":
                         output[i, h, w, c] = np.max(patch)
                     if mode == "avg":
