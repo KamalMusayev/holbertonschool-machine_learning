@@ -16,8 +16,7 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         pw = 0
     else:
         raise ValueError("padding must be 'same' or 'valid'")
-
-
+    
     A_prev_pad = np.pad(A_prev,
                         ((0, 0), (ph, ph), (pw, pw), (0, 0)),
                         mode='constant', constant_values=0)
@@ -34,7 +33,8 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
                     horiz_start = w * sw
                     horiz_end = horiz_start + kw
 
-                    slice = A_prev_pad[i, vert_start:vert_end, horiz_start:horiz_end, :]
+                    slice = A_prev_pad[i, vert_start:vert_end, 
+                    horiz_start:horiz_end, :]
 
                     conv = np.sum(slice * W[:, :, :, c]) + b[:, :, :, c]
 
