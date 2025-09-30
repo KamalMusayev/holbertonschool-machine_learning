@@ -34,10 +34,11 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
                     horiz_end = horiz_start + kw
 
                     slice_ = A_prev_pad[i, vert_start:vert_end,
+                    slice = A_prev_pad[i, vert_start:vert_end,
                                        horiz_start:horiz_end, :]
 
-                    conv = (np.sum(slice_ * W[:, :, :, c])
-                            + b[0, 0, 0, c])
+                    conv = (np.sum(slice * W[:, :, :, c])
+                            + b[:, :, :, c])
 
                     output[i, h, w, c] = activation(conv)
     return output
