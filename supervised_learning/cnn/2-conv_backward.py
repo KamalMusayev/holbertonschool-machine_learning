@@ -17,9 +17,12 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         ph = 0
         pw = 0
 
-    A_prev_pad = np.pad(A_prev,
-                        ((0, 0), (ph, ph), (pw, pw), (0, 0)),
-                        mode='constant', constant_values=0)
+    A_prev_pad = np.pad(
+        A_prev,
+        ((0, 0), (ph, ph), (pw, pw), (0, 0)),
+        mode='constant',
+        constant_values=0
+    )
     dA_prev_pad = np.zeros_like(A_prev_pad)
     dW = np.zeros_like(W)
     db = np.zeros_like(b)
@@ -33,11 +36,20 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
                     horiz_start = w * sw
                     horiz_end = horiz_start + kw
 
-                    a_slice = A_prev_pad[i, vert_start:vert_end,
-                              horiz_start:horiz_end, :]
+                    a_slice = A_prev_pad[
+                        i,
+                        vert_start:vert_end,
+                        horiz_start:horiz_end,
+                        :
+                    ]
 
-                    dA_prev_pad[i, vert_start:vert_end, horiz_start:horiz_end, :] +=\
-                        (W[:, :, :, c] * dZ[i, h, w, c])
+                    dA_prev_pad[
+                        i,
+                        vert_start:vert_end,
+                        horiz_start:horiz_end,
+                        :
+                    ] += W[:, :, :, c] * dZ[i, h, w, c]
+
                     dW[:, :, :, c] += a_slice * dZ[i, h, w, c]
                     db[:, :, :, c] += dZ[i, h, w, c]
 
