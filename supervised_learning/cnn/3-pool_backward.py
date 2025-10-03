@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Comment of Function"""
+
 import numpy as np
+
 
 def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
     """Pooling Backward"""
@@ -20,12 +22,16 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
                     horiz_start = w * sw
                     horiz_end = horiz_start + kw
 
-                    slice = A_prev[i, vert_start:vert_end, horiz_start:horiz_end, ch]
+                    slice = A_prev[i, vert_start:vert_end,
+                                   horiz_start:horiz_end, ch]
 
                     if mode == 'max':
                         mask = (slice == np.max(slice))
-                        dA_prev[i, vert_start:vert_end, horiz_start:horiz_end, ch] += mask * dA[i, h, w, ch]
+                        dA_prev[i, vert_start:vert_end,
+                                horiz_start:horiz_end, ch] += mask * dA[i, h, w, ch]
                     elif mode == 'avg':
-                        dA_prev[i, vert_start:vert_end, horiz_start:horiz_end, ch] += dA[i, h, w, ch] / (kh * kw)
+                        dA_prev[i, vert_start:vert_end,
+                                horiz_start:horiz_end, ch] += (
+                                    dA[i, h, w, ch] / (kh * kw))
 
     return dA_prev
