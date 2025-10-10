@@ -10,10 +10,11 @@ def resnet50():
   input_layer = K.Input(shape=(224,224,3))
   he_normal = K.initializers.HeNormal(seed=0)
   X = K.layers.Conv2D(64, (7,7), padding='same',
-                      activation='relu')(input_layer)
+                      activation='relu',
+                      kernel_initializer=he_normal)(input_layer)
   X = K.layers.BatchNormalization()(X)
   X = K.layers.ReLU()(X)
-  X = K.layers.MaxPooling2D((3,3), strides=2 padding='same')(X)
+  X = K.layers.MaxPooling2D((3,3), strides=2, padding='same')(X)
 
   X = projection_block(X, filters=(64, 64, 256), s=1)
   X = identity_block(X, filters=(64, 64, 256))
