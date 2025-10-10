@@ -17,7 +17,7 @@ def projection_block(A_prev, filters, s=2):
                         kernel_initializer=he_normal)(X)
     X = K.layers.BatchNormalization()(X)
     X = K.layers.ReLU()(X)
-    
+
     X = K.layers.Conv2D(F12, (1, 1), padding='valid',
                         kernel_initializer=he_normal)(X)
     X = K.layers.BatchNormalization()(X)
@@ -29,5 +29,5 @@ def projection_block(A_prev, filters, s=2):
 
     X = K.layers.Add()([X, X_shortcut])
     X = K.layers.ReLU()(X)
-    
+
     return X
