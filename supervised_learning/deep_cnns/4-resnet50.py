@@ -4,6 +4,7 @@ from tensorflow import keras as K
 identity_block = __import__('2-identity_block').identity_block
 projection_block = __import__('3-projection_block').projection_block
 
+
 def resnet50():
     """ResNet-50"""
     he_normal = K.initializers.HeNormal(seed=0)
@@ -36,7 +37,8 @@ def resnet50():
     X = identity_block(X, [512, 512, 2048])
 
     X = K.layers.AveragePooling2D((7, 7), padding='same')(X)
-    X = K.layers.Dense(1000, activation='softmax', kernel_initializer=he_normal)(X)
+    X = K.layers.Dense(1000, activation='softmax',
+                       kernel_initializer=he_normal)(X)
 
     model = K.Model(inputs=input_layer, outputs=X)
     return model
