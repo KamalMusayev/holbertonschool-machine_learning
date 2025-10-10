@@ -9,8 +9,7 @@ def resnet50():
   """ResNet-50"""
   input_layer = K.Input(shape=(224,224,3))
   he_normal = K.initializers.HeNormal(seed=0)
-  X = K.layers.Conv2D(64, (7,7), padding='same',
-                      activation='relu',
+  X = K.layers.Conv2D(64, (7,7), strides=2, padding='same',
                       kernel_initializer=he_normal)(input_layer)
   X = K.layers.BatchNormalization()(X)
   X = K.layers.ReLU()(X)
@@ -33,9 +32,9 @@ def resnet50():
   X = identity_block(X, filters=(512, 512, 2048))
   X = identity_block(X, filters=(512, 512, 2048))
 
-  X = layers.GlobalAveragePooling2D()(X)
-  output_layer = layers.Dense(1000, activation='softmax',
+  X = K.layers.GlobalAveragePooling2D()(X)
+  output_layer = K.layers.Dense(1000, activation='softmax',
                               kernel_initializer=he_normal)(X)
 
-  model = Model(inputs=input_layer, outputs=output_layer)
+  model = K.Model(inputs=input_layer, outputs=output_layer)
   return model
