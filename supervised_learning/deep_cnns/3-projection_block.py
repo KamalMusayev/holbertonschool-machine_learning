@@ -2,6 +2,7 @@
 """Comment of Function"""
 from tensorflow import keras as K
 
+
 def projection_block(A_prev, filters, s=2):
     """Projection Block"""
     F11, F3, F12 = filters
