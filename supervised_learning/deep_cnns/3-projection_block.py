@@ -8,6 +8,7 @@ def projection_block(A_prev, filters, s=2):
     F11, F3, F12 = filters
     X_shortcut = A_prev
     he_normal = K.initializers.HeNormal(seed=0)
+
     X = K.layers.Conv2D(F11, (1, 1), strides=s, padding='valid',
                         kernel_initializer=he_normal)(A_prev)
     X = K.layers.BatchNormalization()(X)
@@ -17,11 +18,10 @@ def projection_block(A_prev, filters, s=2):
                         kernel_initializer=he_normal)(X)
     X = K.layers.BatchNormalization()(X)
     X = K.layers.ReLU()(X)
-    
+
     X = K.layers.Conv2D(F12, (1, 1), padding='valid',
                         kernel_initializer=he_normal)(X)
     X = K.layers.BatchNormalization()(X)
-
 
     X_shortcut = K.layers.Conv2D(F12, (1, 1), strides=s,
                                  padding='valid',
@@ -31,5 +31,4 @@ def projection_block(A_prev, filters, s=2):
     X = K.layers.Add()([X, X_shortcut])
     X = K.layers.ReLU()(X)
 
-    return X
-    
+    ret
