@@ -9,12 +9,12 @@ def dense_block(X, nb_filters, growth_rate, layers):
 
     for _ in range(layers):
         out = K.layers.BatchNormalization()(X)
-        out = K.layers.Activation('relu')(out)
+        out = K.layers.ReLU()(out)
         out = K.layers.Conv2D(4 * growth_rate, (1, 1), padding='same',
                               kernel_initializer=he_norm)(out)
 
         out = K.layers.BatchNormalization()(out)
-        out = K.layers.Activation('relu')(out)
+        out = K.layers.ReLU()(out)
         out = K.layers.Conv2D(growth_rate, (3, 3), padding='same',
                               kernel_initializer=he_norm)(out)
 
