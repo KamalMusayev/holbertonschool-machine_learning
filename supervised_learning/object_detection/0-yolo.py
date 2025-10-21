@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Object Detection"""
 from tensorflow import keras as K
+
+
 class Yolo:
     """Class of Yolo"""
     def __init__(self, model_path, classes_path,
