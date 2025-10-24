@@ -89,13 +89,15 @@ class Yolo:
         def iou(box, boxes):
             """IOU"""
             x1, y1, x2, y2 = box
-            x1s, y1s, x2s, y2s = boxes[:, 0], boxes[:, 1], boxes[:, 2], boxes[:, 3]
+            x1s, y1s, x2s, y2s = (boxes[:, 0], boxes[:, 1],
+                                  boxes[:, 2], boxes[:, 3])
 
             inter_x1 = np.maximum(x1, x1s)
             inter_y1 = np.maximum(y1, y1s)
             inter_x2 = np.minimum(x2, x2s)
             inter_y2 = np.minimum(y2, y2s)
-            inter_area = np.maximum(0, inter_x2 - inter_x1) * np.maximum(0, inter_y2 - inter_y1)
+            inter_area = (np.maximum(0, inter_x2 - inter_x1) *
+                          np.maximum(0, inter_y2 - inter_y1))
 
             box_area = (x2 - x1) * (y2 - y1)
             boxes_area = (x2s - x1s) * (y2s - y1s)
