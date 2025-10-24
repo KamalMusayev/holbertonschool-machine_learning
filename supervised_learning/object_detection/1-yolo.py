@@ -40,8 +40,10 @@ class Yolo:
             bx = (1 / (1 + np.exp(-tx)) + cx) / grid_w
             by = (1 / (1 + np.exp(-ty)) + cy) / grid_h
 
-            bw = (self.anchors[i, :, 0] * np.exp(tw)) / self.model.input.shape[1]
-            bh = (self.anchors[i, :, 1] * np.exp(th)) / self.model.input.shape[2]
+            bw = ((self.anchors[i, :, 0] * np.exp(tw)) /
+                  self.model.input.shape[1])
+            bh = ((self.anchors[i, :, 1] * np.exp(th)) /
+                  self.model.input.shape[2])
 
             x1 = (bx - (bw / 2)) * image_w
             y1 = (by - (bh / 2)) * image_h
