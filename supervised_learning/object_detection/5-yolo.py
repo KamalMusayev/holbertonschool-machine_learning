@@ -157,37 +157,25 @@ class Yolo:
 
         return images, image_paths
 
-        def preprocess_images(self, images):
-            """Preprocess Images"""
-            
-            input_h = self.model.input.shape[1]
-            input_w = self.model.input.shape[2]
-        
-            pimages = []
-            image_shapes = []
+    def preprocess_images(self, images):
+        """Preprocess Images"""
+        image_shapes = []
 
-            for img in images:
-                original_h, original_w = img.shape[:2]
-                image_shapes.append((original_h, original_w))
+        input_h = self.model.input.shape[1]
+        input_w = self.model.input.shape[2]
 
-                scale = min(input_w / original_w, input_h / original_h)
-                new_w = int(original_w * scale)
-                new_h = int(original_h * scale)
+        pimages = []
 
-                resized_img = cv2.resize(img, (new_w, new_h),
-                                         interpolation=cv2.INTER_CUBIC)
-                
-                padded_img = np.full((input_h, input_w, 3), 128)
-                padded_img = padded_img.astype('float32') / 255.0
+        for img in images:
+            h, w = img.shape[:2]
+            image_shapes.append((h, w))
 
-                dw = (input_w - new_w) // 2
-                dh = (input_h - new_h) // 2
-            
-                padded_img[dh:dh + new_h, dw:dw + new_w, :] = resized_img.astype('float32') / 255.0
+            resized = cv2.resize(img, (input_w, input_h), interpolation=cv2.INTER_LINEAR)
+            normalized = resized.astype('float32') / 255.0
 
-                pimages.append(padded_img)
-                
-            pimages = np.array(pimages)
-            image_shapes = np.array(image_shapes)
+            pimages.append(normalized)
 
-            return pimages, image_shapes
+        pimages = np.array(pimages)
+        image_shapes = np.array(image_shapes)
+
+        return pimages, image_shapes
