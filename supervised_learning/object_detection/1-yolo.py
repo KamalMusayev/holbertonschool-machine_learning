@@ -22,31 +22,33 @@ class Yolo:
         box_class_probs = []
         image_h, image_w = image_size
 
-        for i in enumerate(outputs):
-            grid_h, grid_w, anchor_boxes = outputs.shape[:3]
-            t_x = outputs[..., 0]
-            t_y = outputs[..., 1]
-            t_w = outputs[..., 2]
-            t_h = outputs[..., 3]
-            box_confidence = 1 / (1 + np.exp(-outputs[..., 4]))
-            box_class_prob = 1 / (1 + np.exp(-outputs[..., 5:]))
+        for i, output in enumerate(outputs):
+        grid_h, grid_w, anchor_boxes = output.shape[:3]
 
-            c_x = np.arange(grid_w).reshape(1, grid_w, 1)
-            c_y = np.arange(grid_h).reshape(grid_h, 1, 1)
+        tx = output[..., 0]
+        ty = output[..., 1]
+        tw = output[..., 2]
+        th = output[..., 3]
 
-            bx = (1 / (1 + np.exp(-t_x)) + c_x) / grid_w
-            by = (1 / (1 + np.exp(-t_y)) + c_y) / grid_h
+        box_confidence = 1 / (1 + np.exp(-output[..., 4]))
+        box_class_prob = 1 / (1 + np.exp(-output[..., 5:]))
 
-            bw = (self.anchors[i, :, 0] * np.exp(t_w)) / self.model.input.shape[1]
-            bh = (self.anchors[i, :, 1] * np.exp(t_h)) / self.model.input.shape[2]
+        cx = np.arange(grid_w).reshape(1, grid_w, 1)
+        cy = np.arange(grid_h).reshape(grid_h, 1, 1)
 
-            x1 = (bx - (bw / 2)) * image_w
-            y1 = (by - (bh / 2)) * image_h
-            x2 = (bx + (bw / 2)) * image_w
-            y2 = (by + (bh / 2)) * image_h
+        bx = (1 / (1 + np.exp(-tx)) + cx) / grid_w
+        by = (1 / (1 + np.exp(-ty)) + cy) / grid_h
 
-            boxes.append(np.stack([x1, y1, x2, y2], axis=-1))
-            box_confidences.append(box_confidence[..., np.newaxis])
-            box_class_probs.append(box_class_prob)
+        bw = (self.anchors[i, :, 0] * np.exp(tw)) / self.model.input.shape[1]
+        bh = (self.anchors[i, :, 1] * np.exp(th)) / self.model.input.shape[2]
 
-        return boxes, box_confidences, box_class_probs
+        x1 = (bx - (bw / 2)) * image_w
+        y1 = (by - (bh / 2)) * image_h
+        x2 = (bx + (bw / 2)) * image_w
+        y2 = (by + (bh / 2)) * image_h
+
+        boxes.append(np.stack([x1, y1, x2, y2], axis=-1))
+        box_confidences.append(box_confidence[..., np.newaxis])
+        box_class_probs.append(box_class_prob)
+
+    return boxes, box_confidences, box_class_probs
