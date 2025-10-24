@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Object Detection"""
-import np
 from tensorflow import keras as K
 import numpy as np
 
@@ -66,18 +65,14 @@ class Yolo:
         for i in range(len(boxes)):
             box_scores_i = box_confidences[i] * box_class_probs[i]
 
-            box_classes_i = np.argmax(box_scores, axis=-1)
-            box_classes_scores_i = np.max(box_scores, axis=-1)
+            box_classes_i = np.argmax(box_scores_i, axis=-1)
+            box_classes_scores_i = np.max(box_scores_i, axis=-1)
 
             filtering_mask = box_classes_scores_i >= self.class_t
 
             filtered_boxes.append(boxes[i][filtering_mask])
             box_classes.append(box_classes_i[filtering_mask])
             box_scores.append(box_classes_scores_i[filtering_mask])
-
-        filtered_boxes = np.concatenate(filtered_boxes, axis=0)
-        box_classes = np.concatenate(box_classes, axis=0)
-        box_scores = np.concatenate(box_scores, axis=0)
 
         filtered_boxes = np.concatenate(filtered_boxes, axis=0)
         box_classes = np.concatenate(box_classes, axis=0)
