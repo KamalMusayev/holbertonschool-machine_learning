@@ -1,28 +1,11 @@
-#!/usr/bin/env python3
-"""Object Detection"""
-import numpy as np
+def process_outputs(self, outputs, image_size):
+    """Process Outputs"""
+    boxes = []
+    box_confidences = []
+    box_class_probs = []
+    image_h, image_w = image_size
 
-
-class Yolo:
-    """Class of Yolo"""
-    def __init__(self, model_path, classes_path,
-                 class_t, nms_t, anchors):
-        self.model = K.models.load_model(model_path)
-        with open(classes_path, 'r') as f:
-            self.class_names = [line.strip()
-                                for line in f.readlines()]
-        self.class_t = class_t
-        self.nms_t = nms_t
-        self.anchors = anchors
-
-    def process_outputs(self, outputs, image_size):
-        """Process Outputs"""
-        boxes = []
-        box_confidences = []
-        box_class_probs = []
-        image_h, image_w = image_size
-
-        for i, output in enumerate(outputs):
+    for i, output in enumerate(outputs):
         grid_h, grid_w, anchor_boxes = output.shape[:3]
 
         tx = output[..., 0]
