@@ -11,8 +11,6 @@ class Yolo:
     def __init__(self, model_path, classes_path,
                  class_t, nms_t, anchors):
         self.model = K.models.load_model(model_path)
-        self.input_h = self.model.input.shape[1]
-        self.input_w = self.model.input.shape[2]
         with open(classes_path, 'r') as f:
             self.class_names = [line.strip()
                                 for line in f.readlines()]
@@ -45,9 +43,9 @@ class Yolo:
             by = (1 / (1 + np.exp(-ty)) + cy) / grid_h
 
             bw = ((self.anchors[i, :, 0] * np.exp(tw)) /
-                  self.input_h
+                  self.model.input.shape[1])
             bh = ((self.anchors[i, :, 1] * np.exp(th)) /
-                  self.input_h
+                  self.model.input.shape[2])
 
             x1 = (bx - (bw / 2)) * image_w
             y1 = (by - (bh / 2)) * image_h
@@ -172,7 +170,8 @@ class Yolo:
             h, w = img.shape[:2]
             image_shapes.append((h, w))
 
-            resized = cv2.resize(img, (input_w, input_h), interpolation=cv2.INTER_AREA)
+            resized = cv2.resize(img, (input_w, input_h),
+                                 interpolation=cv2.INTER_CUBIC)
             normalized = resized.astype('float32') / 255.0
 
             pimages.append(normalized)
