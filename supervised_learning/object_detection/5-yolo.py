@@ -161,8 +161,8 @@ class Yolo:
         """Preprocess Images"""
         image_shapes = []
 
-        input_h = self.model.input.shape[1]
-        input_w = self.model.input.shape[2]
+        input_h = self.model.input.shape.as_list()[1]
+        input_w = self.model.input.shape.as_list()[2]
 
         pimages = []
 
@@ -170,7 +170,7 @@ class Yolo:
             h, w = img.shape[:2]
             image_shapes.append((h, w))
 
-            resized = cv2.resize(img, (input_w, input_h), interpolation=cv2.INTER_LINEAR)
+            resized = cv2.resize(img, (input_w, input_h), interpolation=cv2.INTER_CUBIC)
             normalized = resized.astype('float32') / 255.0
 
             pimages.append(normalized)
