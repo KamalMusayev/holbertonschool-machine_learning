@@ -23,21 +23,24 @@ class NST:
 
         self.style_image = self.scale_image(style_image)
         self.content_image = self.scale_image(content_image)
-        self.alpha = alpha
-        self.beta = beta
+        self.alpha = float(alpha)
+        self.beta = float(beta)
 
     @staticmethod
     def scale_image(image):
+        """Static Method hat rescales an image
+        such that its pixels values are
+        between 0 and 1 and its largest side is 512 pixels"""
         if not isinstance(image, np.ndarray) or image.ndim != 3 or image.shape[2] != 3:
             raise TypeError("image must be a numpy.ndarray with shape (h, w, 3)")
 
         h, w, _ = image.shape
         if h > w:
             h_new = 512
-            w_new = int(w * 512 / h)
+            w_new = int(np.round(w * 512 / h))
         else:
             w_new = 512
-            h_new = int(h * 512 / w)
+            h_new = int(np.round(h * 512 / w))
 
         image = tf.image.resize(image, (h_new, w_new), method='bicubic')
         image = tf.cast(image, tf.float32) / 255.0
