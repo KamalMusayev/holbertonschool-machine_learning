@@ -28,9 +28,6 @@ class NST:
 
     @staticmethod
     def scale_image(image):
-        """Static Method hat rescales an image
-        such that its pixels values are
-        between 0 and 1 and its largest side is 512 pixels"""
         if not isinstance(image, np.ndarray) or image.ndim != 3 or image.shape[2] != 3:
             raise TypeError("image must be a numpy.ndarray with shape (h, w, 3)")
 
@@ -43,6 +40,6 @@ class NST:
             h_new = int(h * 512 / w)
 
         image = tf.image.resize(image, (h_new, w_new), method='bicubic')
-        image = image / 255.0
+        image = tf.cast(image, tf.float32) / 255.0
         image = tf.expand_dims(image, axis=0)
         return image
