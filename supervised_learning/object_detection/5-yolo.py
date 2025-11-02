@@ -164,7 +164,9 @@ class Yolo:
         image_shapes = np.array([[img.shape[0], img.shape[1]] for img in images])
         pimages = []
         for img in images:
-            resized = cv2.resize(img, (input_w, input_h), interpolation=cv2.INTER_CUBIC)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            resized = cv2.resize(img, (input_w, input_h),
+                                 interpolation=cv2.INTER_CUBIC)
             normalized = resized / 255.0
             pimages.append(normalized)
         pimages = np.array(pimages)
