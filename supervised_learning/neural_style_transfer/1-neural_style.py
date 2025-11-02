@@ -53,6 +53,17 @@ class NST:
         vgg = tf.keras.applications.VGG19(include_top=False,
                                           weights='imagenet')
         vgg.trainable = False
+        
+        for layer in vgg.layers:
+            if isinstance(layer, tf.keras.layers.MaxPooling2D):
+                idx = vgg.layers.index(layer)
+                vgg.layers[idx] = tf.keras.layers.AveragePooling2D(
+                    pool_size=layer.pool_size,
+                    strides=layer.strides,
+                    padding=layer.padding,
+                    name=layer.name
+                )
+        
         style_outputs = [vgg.get_layer(name).output for name in self.style_layers]
         content_output = vgg.get_layer(self.content_layer).output
         model_outputs = style_outputs + [content_output]
