@@ -159,27 +159,28 @@ class Yolo:
 
     def preprocess_images(self, images):
         """Preprocess Images"""
-        image_shapes = []
-
-        input_h = self.model.input.shape.as_list()[1]
-        input_w = self.model.input.shape.as_list()[2]
+        input_h = self.model.input.shape[2]
+        input_w = self.model.input.shape[1]
 
         pimages = []
+        image_shapes = []
 
-        for img in images:
-            h, w = img.shape[:2]
-            image_shapes.append((h, w))
+        for image in images:
+            image_shapes.append(image.shape[:2])
 
-            resized = cv2.resize(img, (input_w, input_h),
-                                 interpolation=cv2.INTER_CUBIC)
-            normalized = resized.astype('float32') / 255.0
+            resized = cv2.resize(
+                image,
+                (input_w, input_h),
+                interpolation=cv2.INTER_CUBIC
+            )
 
-            pimages.append(normalized)
+            rescaled = resized / 255.0
+            pimages.append(rescaled)
 
         pimages = np.array(pimages)
         image_shapes = np.array(image_shapes)
 
-        return pimages, image_shapes
+        return (pimages, image_shapes)
 
     def show_boxes(self, image, boxes, box_classes,
                    box_scores, file_name):
