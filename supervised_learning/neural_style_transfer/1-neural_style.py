@@ -25,7 +25,7 @@ class NST:
         self.content_image = self.scale_image(content_image)
         self.alpha = alpha
         self.beta = beta
-        self.model = self.load_model()
+        self.load_model()
     
     @staticmethod
     def scale_image(image):
@@ -56,6 +56,4 @@ class NST:
         style_outputs = [vgg.get_layer(name).output for name in self.style_layers]
         content_output = vgg.get_layer(self.content_layer).output
         model_outputs = style_outputs + [content_output]
-        model = tf.keras.models.Model(inputs=vgg.input, outputs=model_outputs)
-        
-        return model
+        self.model = tf.keras.models.Model(inputs=vgg.input, outputs=model_outputs)
