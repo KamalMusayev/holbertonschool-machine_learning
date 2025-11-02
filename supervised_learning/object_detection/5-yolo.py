@@ -161,7 +161,8 @@ class Yolo:
         """Preprocess Images"""
         input_h = self.model.input.shape[1]
         input_w = self.model.input.shape[2]
-        image_shapes = np.array([[img.shape[0], img.shape[1]] for img in images])
+        image_shapes = np.array([[img.shape[0],
+                                  img.shape[1]] for img in images])
         pimages = []
         for img in images:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
