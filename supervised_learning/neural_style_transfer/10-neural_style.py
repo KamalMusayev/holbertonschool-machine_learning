@@ -138,6 +138,11 @@ class NST:
     @staticmethod
     def variational_cost(generated_image):
         """Variational Cost"""
+        if not isinstance(generated_image, (tf.Tensor, tf.Variable)):
+            raise TypeError("generated_image must be a tensor of rank 4")
+        if len(generated_image.shape) != 4:
+            raise TypeError("generated_image must be a tensor of rank 4")
+
         h_var = tf.reduce_sum(tf.square(
             generated_image[:, 1:, :, :] - generated_image[:, :-1, :, :]
         ))
@@ -200,11 +205,11 @@ class NST:
             raise TypeError("lr must be a number")
         if lr <= 0:
             raise ValueError("lr must be positive")
-        if not isinstance(beta1, float):
+        if not isinstance(beta1, (float, int)):
             raise TypeError("beta1 must be a float")
         if not (0 <= beta1 <= 1):
             raise ValueError("beta1 must be in the range [0, 1]")
-        if not isinstance(beta2, float):
+        if not isinstance(beta2, (float, int)):
             raise TypeError("beta2 must be a float")
         if not (0 <= beta2 <= 1):
             raise ValueError("beta2 must be in the range [0, 1]")
