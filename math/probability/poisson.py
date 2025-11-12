@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 """Probability"""
-import math
-
 
 
 class Poisson:
@@ -26,6 +24,9 @@ class Poisson:
         if k < 0:
             return 0
 
-        e_term = math.exp(-self.lambtha)
-        numerator = (self.lambtha ** k) * e_term
-        denominator = math.factorial(k)
+        e = 2.7182818285
+        e_term = 1 / (e ** self.lambtha)
+        factorial = 1
+        for i in range(1, k + 1):
+            factorial *= i
+        return (self.lambtha ** k) * e_term / factorial
