@@ -17,10 +17,10 @@ class Exponential:
                 raise ValueError("lambtha must be a positive value")
             self.lambtha = float(lambtha)
 
-    def pmf(self, k):
+    def pdf(self, x):
         """Probability Mass Function"""
-        if k < 0:
+        if x < 0:
             return 0
         e = 2.7182818285
-        pdf = self.lambtha * (1 / (e ** (self.lambtha * k)))
+        pdf = self.lambtha * (1 / (e ** (self.lambtha * x)))
         return pdf
