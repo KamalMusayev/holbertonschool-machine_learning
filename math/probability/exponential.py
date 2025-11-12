@@ -30,5 +30,5 @@ class Exponential:
         if x < 0:
             return 0
         e = 2.7182818285
-        cdf = 1 - self.lambtha * (1 / (e ** (self.lambtha * x)))
+        cdf = 1 - (1 / (e ** (self.lambtha * x)))
         return cdf
