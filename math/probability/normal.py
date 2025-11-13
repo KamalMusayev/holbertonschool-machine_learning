@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Probability"""
+pi = 3.1415926536
+e = 2.7182818285
 
 
 class Normal:
@@ -32,8 +34,8 @@ class Normal:
 
     def pdf(self, x):
         """Probability Density Function"""
-        pi = 3.14159
-        e = 2.71828
+        pi = 3.1415926536
+        e = 2.7182818285
         part1 = 1 / (self.stddev * (2 * pi) ** 0.5)
         part2 = e ** (-0.5 * ((x - self.mean) / self.stddev) ** 2)
         pdf = part1 * part2
@@ -42,7 +44,7 @@ class Normal:
 
     @staticmethod
     def erf(x):
-        return (2 / (3.14159 ** 0.5)) * (x - (x ** 3) / 3 + (x ** 5) / 10)
+        return (2 / (pi) ** 0.5) * (x - x ** 3 / 3 + x ** 5 / 10 - x ** 7 / 42 + x ** 9 / 216)
 
     def cdf(self, x):
         """Cumulative Distribution Function"""
