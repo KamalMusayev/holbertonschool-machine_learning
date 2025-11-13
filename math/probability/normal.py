@@ -44,7 +44,11 @@ class Normal:
 
     @staticmethod
     def erf(x):
-        return (2 / (pi) ** 0.5) * (x - x ** 3 / 3 + x ** 5 / 10 - x ** 7 / 42 + x ** 9 / 216)
+        return ((2 / (pi) ** 0.5) *
+                (x - (x ** 3) / 3 +
+                 (x ** 5) / 10 -
+                 (x ** 7) / 42 +
+                 (x ** 9) / 216))
 
     def cdf(self, x):
         """Cumulative Distribution Function"""
