@@ -29,7 +29,7 @@ class Binomial:
 
     def pmf(self, k):
         """Probability Mass Function"""
-        if not isinstance(k,int):
+        if not isinstance(k, int):
             k = int(k)
         if k < 0 or k > self.n:
             return 0
