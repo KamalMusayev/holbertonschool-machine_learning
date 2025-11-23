@@ -118,6 +118,6 @@ def inverse(matrix):
     if det == 0:
         return None
 
-    inv = [[adj[i][j] / det for i in range(len(adj))]
-           for j in range(len(adj[0]))]
+    inv = [[adj[i][j] / det for j in range(len(adj[0]))]
+           for i in range(len(adj))]
     return inv
