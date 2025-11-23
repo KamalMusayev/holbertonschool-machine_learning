@@ -38,4 +38,4 @@ class MultiNormal:
 
         norm_const = 1.0 / np.sqrt(((2 * np.pi) ** self.d) * det)
 
-        return norm_const * np.exp(exponent)
+        return float(norm_const * np.exp(exponent))
