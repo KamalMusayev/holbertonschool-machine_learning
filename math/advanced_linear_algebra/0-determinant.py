@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""Advanced Linear Algebra"""
+
+
 def determinant(matrix):
     """Determinant of Matrix"""
     if not isinstance(matrix, list) or len(matrix) == 0:
