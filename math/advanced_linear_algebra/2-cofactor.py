@@ -71,7 +71,7 @@ def cofactor(matrix):
     cofactor = []
     for a in range(len(matrix)):
         row = []
-        for b in range(len(matrix)):
+        for b in range(len(matrix[0])):
             copy_matrix = [x[:] for x in matrix]
             del copy_matrix[a]
             for row in copy_matrix:
@@ -79,3 +79,5 @@ def cofactor(matrix):
             c = (-1) ** (a + b)
             row.append(c * determinant(copy_matrix))
         cofactor.append(row)
+        
+    return cofactor
