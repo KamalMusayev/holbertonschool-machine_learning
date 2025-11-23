@@ -40,7 +40,7 @@ def minor(matrix):
     if len(matrix) != len(matrix[0]):
         raise ValueError("matrix must be a non-empty square matrix")
     if len(matrix) == 1:
-        return matrix[0][0]
+        return [[1]]
 
     minor = []
     for a in range(len(matrix)):
