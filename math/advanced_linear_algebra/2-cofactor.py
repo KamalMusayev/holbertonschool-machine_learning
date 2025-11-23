@@ -68,16 +68,16 @@ def cofactor(matrix):
     if len(matrix) == 1:
         return [[1]]
 
-    cofactor = []
+    cofactor_matrix = []
     for a in range(len(matrix)):
         row = []
         for b in range(len(matrix[0])):
             copy_matrix = [x[:] for x in matrix]
             del copy_matrix[a]
-            for row in copy_matrix:
-                del row[b]
+            for r in copy_matrix:
+                del r[b]
             c = (-1) ** (a + b)
             row.append(c * determinant(copy_matrix))
-        cofactor.append(row)
-        
-    return cofactor
+        cofactor_matrix.append(row)
+
+    return cofactor_matrix
