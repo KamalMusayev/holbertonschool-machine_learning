@@ -32,12 +32,12 @@ def determinant(matrix):
 
 def minor(matrix):
     """Minor Matrix of Matrix"""
-    if not isinstance(matrix, list):
+    if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
     for sub_list in matrix:
         if not isinstance(sub_list, list):
             raise TypeError("matrix must be a list of lists")
-    if len(matrix) != len(matrix[0]) or len(matrix) == 0:
+    if len(matrix) != len(matrix[0]):
         raise ValueError("matrix must be a non-empty square matrix")
     if len(matrix) == 1:
         return matrix[0][0]
