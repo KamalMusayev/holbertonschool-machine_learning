@@ -38,5 +38,5 @@ def posterior(x, n, P, Pr):
     likelihoods = comb * (P ** x) * ((1 - P) ** (n - x))
     intersections = Pr * likelihoods
     marg = np.sum(intersections)
-    posterior =  intersections / marg
+    posterior = intersections / marg
     return posterior
