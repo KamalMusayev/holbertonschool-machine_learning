@@ -35,13 +35,8 @@ def posterior(x, n, P, Pr):
         raise ValueError("Pr must sum to 1")
 
     comb = factorial(n) / (factorial(n - x) * factorial(x))
-
     likelihoods = comb * (P ** x) * ((1 - P) ** (n - x))
-
     intersections = Pr * likelihoods
-
     marg = np.sum(intersections)
-
     posterior =  intersections / marg
-
     return posterior
