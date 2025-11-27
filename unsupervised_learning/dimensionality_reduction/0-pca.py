@@ -6,7 +6,8 @@ import numpy as np
 def pca(X, var=0.95):
     """Principal Component Analysis"""
     X_centered = X - np.mean(X, axis=0)
-    cov = np.dot(X_centered.T, X_centered) / X.shape[0]
+    
+    cov = np.dot(X_centered.T, X_centered) / (X_centered.shape[0] - 1)
 
     eigenvalues, eigenvectors = np.linalg.eigh(cov)
 
