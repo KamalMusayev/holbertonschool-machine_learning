@@ -7,7 +7,7 @@ def pca(X, var=0.95):
     """Principal Component Analysis"""
     x_centered = X - np.mean(X, axis=0)
 
-    cov = np.dot(x_centered.T, x_centered) / (x_centered.shape[0] - 1)
+    cov = np.dot(x_centered.T, x_centered) / x_centered.shape[0]
 
     eigenvalues, eigenvectors = np.linalg.eigh(cov)
 
@@ -21,5 +21,7 @@ def pca(X, var=0.95):
     k = np.argmax(cumulative_var >= var) + 1
 
     w = eigenvectors[:, :k]
+    
+    X_transformed = np.dot(x_centered, w)
 
-    return w
+    return X_transformed, w
