@@ -11,6 +11,7 @@ def pca(X, ndim):
     eigenvalues, eigenvectors = np.linalg.eigh(cov)
     idx = np.argsort(eigenvalues)[::-1]
     eigenvectors = eigenvectors[:, idx]
+    eigenvalues = eigenvalues[idx]
     W = eigenvectors[:, :ndim]
     T = np.dot(X_centered, W)
     return T
