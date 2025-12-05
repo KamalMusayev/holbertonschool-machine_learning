@@ -22,6 +22,7 @@ def initialize(X, k):
 def kmeans(X, k, iterations=1000):
     """K-means"""
     n, d = X.shape
+    np.random.seed(0)
     C = initialize(X, k)
     if C is None:
         return None, None
