@@ -15,6 +15,9 @@ def maximization(X, g):
 
     if g.shape[1] != n:
         return None, None, None
+    
+    if np.any(g < 0) or np.any(g > 1):
+        return None, None, None
 
     total_prob = np.sum(g, axis=1)
 
