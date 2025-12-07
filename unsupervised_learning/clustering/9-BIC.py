@@ -30,7 +30,6 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     k_range = kmax - kmin + 1
     log_likelihoods = np.zeros(k_range)
     bic_values = np.zeros(k_range)
-    results = []
 
     best_bic = None
     best_k = None
@@ -45,12 +44,10 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
 
         log_likelihoods[i] = log_likelihood
 
-        p = k * d + k * d * (d + 1) / 2 + k - 1
+        p = (k - 1) + (k * d) + (k * d * (d + 1) / 2)
 
         bic = p * np.log(n) - 2 * log_likelihood
         bic_values[i] = bic
-
-        results.append((pi, m, S))
 
         if best_bic is None or bic < best_bic:
             best_bic = bic
