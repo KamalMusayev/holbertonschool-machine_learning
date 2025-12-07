@@ -1,50 +1,42 @@
 #!/usr/bin/env python3
-""" 0x01. Clustering """
+"""Comment of Function"""
 import numpy as np
 expectation_maximization = __import__('8-EM').expectation_maximization
 
 
 def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
-    """
-    finds the best number of clusters for a GMM using the
-    Bayesian Information Criterion
-    """
+    """Finds the best number of clusters for a GMM using the BIC"""
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None, None, None
 
-    if not isinstance(kmin, int) or kmin < 1:
-        return None, None, None, None
-
-    if not isinstance(kmax, int) or kmax < kmin:
-        return None, None, None, None
-
-    if not isinstance(iterations, int):
-        return None, None, None, None
-
-    if not isinstance(tol, float) or tol < 0:
-        return None, None, None, None
-
-    if not isinstance(verbose, bool):
-        return None, None, None, None
+    n, d = X.shape
 
     if kmax is None:
-        kmax = iterations
+        kmax = n
 
-    n = X.shape[0]
-    prior_bic = 0
-    likelyhoods = bics = []
-    best_k = kmax
-    pi_prev = m_prev = S_prev = best_res = None
+    log_likelihoods = np.zeros(kmax - kmin + 1)
+    BIC_values = np.zeros(kmax - kmin + 1)
+
+    best_k = None
+    best_bic = float('inf')
+    best_result = None
+
     for k in range(kmin, kmax + 1):
-        pi, m, S, g, ll = expectation_maximization(X, k, iterations, tol,
-                                                   verbose)
-        bic = k * np.log(n) - 2 * ll
-        if np.isclose(bic, prior_bic) and best_k >= k:
-            best_k = k - 1
-            best_res = pi_prev, m_prev, S_prev
-        pi_prev, m_prev, S_prev = pi, m, S
-        likelyhoods.append(ll)
-        bics.append(bic)
-        prior_bic = bic
+        pi, m, S, g, l = expectation_maximization(X, k, iterations=iterations, tol=tol, verbose=verbose)
 
-    return best_k, best_res, np.asarray(likelyhoods), np.asarray(bics)
+        if pi is None:
+            continue
+
+        p = k * (d + (d * (d + 1)) // 2 + 1)
+
+        BIC_value = p * np.log(n) - 2 * l
+
+        log_likelihoods[k - kmin] = l
+        BIC_values[k - kmin] = BIC_value
+
+        if BIC_value < best_bic:
+            best_bic = BIC_value
+            best_k = k
+            best_result = (pi, m, S)
+
+    return best_k, best_result, log_likelihoods, BIC_values
