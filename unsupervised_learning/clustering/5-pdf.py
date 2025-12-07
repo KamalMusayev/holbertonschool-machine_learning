@@ -8,6 +8,9 @@ def pdf(X, m, S):
     """Calculate the probability density function of a Gaussian distribution"""
     if not isinstance(X, np.ndarray) or not isinstance(m, np.ndarray) or not isinstance(S, np.ndarray):
         return None
+    
+    if X.ndim == 1:
+        X = X.reshape(1, -1)
 
     n, d = X.shape
     if m.shape != (d,) or S.shape != (d, d):
