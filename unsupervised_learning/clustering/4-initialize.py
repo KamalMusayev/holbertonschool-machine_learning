@@ -15,6 +15,6 @@ def initialize(X, k):
     m = C
 
     d = X.shape[1]
-    S = np.array([np.eye(d) for _ in range(k)])
+    S = np.tile(np.eye(d), (k, 1, 1))
 
     return pi, m, S
