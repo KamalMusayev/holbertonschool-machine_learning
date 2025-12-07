@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Comment of Function"""
+""" 0x01. Clustering """
 import numpy as np
 expectation_maximization = __import__('8-EM').expectation_maximization
 
 
 def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
-    """Finds the best number of clusters for a GMM using the BIC"""
+    """
+    finds the best number of clusters for a GMM using the
+    Bayesian Information Criterion
+    """
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None, None, None
 
