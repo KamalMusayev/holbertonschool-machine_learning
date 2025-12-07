@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Comment of Function"""
+"""Some comments"""
 import numpy as np
 expectation_maximization = __import__('8-EM').expectation_maximization
 
 
 def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
-    """Finds the best number of clusters for a GMM using the BIC"""
+    """function that finds the best number of clusters for a GMM using
+    the Bayesian Information Criterion"""
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None, None
     if not isinstance(kmin, int) or kmin <= 0 or X.shape[0] <= kmin:
