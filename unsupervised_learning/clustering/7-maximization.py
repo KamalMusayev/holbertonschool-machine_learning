@@ -13,6 +13,9 @@ def maximization(X, g):
     k = g.shape[0]
     if g.shape[1] != n:
         return None, None, None
+    column_sums = np.sum(g, axis=0)
+    if not np.allclose(column_sums, 1):
+        return None, None, None
     total_prob = np.sum(g, axis=1)
     pi = total_prob / n
     m = np.zeros((k, d))
