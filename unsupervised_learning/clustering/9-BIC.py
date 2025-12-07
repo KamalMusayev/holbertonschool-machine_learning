@@ -1,4 +1,6 @@
+#!/usr/bin/env python3
 import numpy as np
+"""try"""
 # Assuming 8-EM.py is available and contains the expectation_maximization function
 try:
     expectation_maximization = __import__('8-EM').expectation_maximization
