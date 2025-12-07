@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Comment of Function"""
+"""Clustering module"""
 import numpy as np
 kmeans = __import__('1-kmeans').kmeans
 variance = __import__('2-variance').variance
 
 
 def optimum_k(X, kmin=1, kmax=None, iterations=1000):
-  """Tests for the optimum number of clusters by variance"""
+    """Tests for the optimum number of clusters by variance
+    Args:
+        X is a numpy.ndarray of shape (n, d)
+        kmin is a positive integer containing the minimum number of clusters
+        kmax is a positive integer containing the maximum number of clusters"""
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None
 
