@@ -34,10 +34,10 @@ class GaussianProcess:
 
     def update(self, X_new, Y_new):
         """Function updates a Gaussian Process"""
-        k_new = self.kernel(X_new, self.X[:-1])
+        k_new = self.kernel(X_new, self.X)
         k_nn = self.kernel(X_new, X_new)
         top = np.hstack([self.K, k_new.T])
         bottom = np.hstack([k_new, k_nn])
+        self.K = np.vstack([top, bottom])
         self.X = np.vstack([self.X, X_new])
         self.Y = np.vstack([self.Y, Y_new])
-        self.K = np.vstack([top, bottom])
