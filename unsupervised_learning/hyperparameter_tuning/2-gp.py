@@ -4,7 +4,8 @@ import numpy as np
 
 
 class GaussianProcess:
-    """Gaussian Process Class that represents a noiseless 1D Gaussian process"""
+    """Gaussian Process Class that
+    represents a noiseless 1D Gaussian process"""
 
     def __init__(self, X_init, Y_init, l=1, sigma_f=1):
         """Initialize variables"""
@@ -21,7 +22,7 @@ class GaussianProcess:
         return k
 
     def predict(self, X_s):
-        """Function predicts the mean and 
+        """Function predicts the mean and
         standard deviation of points in a Gaussian process"""
         K_s = self.kernel(X_s, self.X)
         K_ss = self.kernel(X_s, X_s)
