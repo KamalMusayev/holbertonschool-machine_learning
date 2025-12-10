@@ -26,12 +26,10 @@ class BayesianOptimization:
       else:
         best = np.max(self.gp.Y)
       
-      Z = (mu - best - self.xsi) / sigma
-      EI = np.zeros_like(mu)
-      nonzero = sigma != 0
-      EI[nonzero] = ((mu[nonzero] - best - self.xsi) *
-                     norm.cdf(Z[nonzero]) +
-                     sigma[nonzero] * norm.pdf(Z[nonzero]))
+      improve = best - mu - self.xsi
+      Z = improve / sigma
+      EI[nonzero] = improve[nonzero] * norm.cdf(Z[nonzero]) + \
+                    sigma[nonzero] * norm.pdf(Z[nonzero])
       
       X_next = self.X_s[np.argmax(EI)]
       
