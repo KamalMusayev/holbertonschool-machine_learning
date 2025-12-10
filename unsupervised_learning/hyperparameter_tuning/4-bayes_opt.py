@@ -17,20 +17,26 @@ class BayesianOptimization:
                                ac_samples).reshape(-1,1)
         self.xsi = xsi
         self.minimize = minimize
-    
+
     def acquisition(self):
-      """Function that calculates the next best sample location"""
-      mu, sigma = self.gp.predict(self.X_s)
-      if self.minimize:
-        best = np.min(self.gp.Y)
-      else:
-        best = np.max(self.gp.Y)
-      
-      improve = best - mu - self.xsi
-      Z = improve / sigma
-      EI[nonzero] = improve[nonzero] * norm.cdf(Z[nonzero]) + \
-                    sigma[nonzero] * norm.pdf(Z[nonzero])
-      
-      X_next = self.X_s[np.argmax(EI)]
-      
-      return X_next, EI
+        """Function that calculates the next best sample location"""
+        mu, sigma = self.gp.predict(self.X_s)
+
+        if self.minimize:
+            best = np.min(self.gp.Y)
+            improve = best - mu - self.xsi
+        else:
+            best = np.max(self.gp.Y)
+            improve = mu - best - self.xsi
+
+        Z = np.zeros_like(mu)
+        Z[sigma != 0] = improve[sigma != 0] / sigma[sigma != 0]
+
+        EI = np.zeros_like(mu)
+        nonzero = sigma != 0
+        EI[nonzero] = improve[nonzero] * norm.cdf(Z[nonzero]) + \
+                      sigma[nonzero] * norm.pdf(Z[nonzero])
+
+        X_next = self.X_s[np.argmax(EI)]
+
+        return X_next, EI
