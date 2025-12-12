@@ -2,6 +2,7 @@
 """Comment of Function"""
 import numpy as np
 from scipy.stats import norm
+
 GP = __import__('2-gp').GaussianProcess
 
 
@@ -44,21 +45,18 @@ class BayesianOptimization:
 
     def optimize(self, iterations=100):
         """Function that optimizes the black-box function"""
-        for i in range(iterations):
-            X_next, EI = self.acquisition()
-
-            if np.any(np.isclose(self.gp.X.flatten(), X_next)):
+        x_searched = []
+        for _ in range(iterations):
+            x, _ = self.acquisition()
+            y = self.f(x)
+            if x in x_searched:
                 break
-
-            Y_next = self.f(X_next)
-            self.gp.update(X_next, Y_next)
-
+            x_searched.append(x)
+            self.gp.update(x, y)
+        self.gp.X = self.gp.X[:-1]
         if self.minimize:
-            idx = np.argmin(self.gp.Y)
+            y_opt = np.min(self.gp.Y, keepdims=True)
+            return self.gp.X[np.argmin(self.gp.Y)], y_opt[0]
         else:
-            idx = np.argmax(self.gp.Y)
-
-        X_opt = self.gp.X[idx]
-        Y_opt = self.gp.Y[idx]
-
-        return X_opt, Y_opt
+            y_opt = np.max(self.gp.Y, keepdims=True)
+            return self.gp.X[np.argmax(self.gp.Y)], y_opt[0]
