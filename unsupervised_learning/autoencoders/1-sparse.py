@@ -1,11 +1,16 @@
+#!/usr/bin/env python3
+"""Comment of Function"""
 import tensorflow.keras as keras
 
+
 def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
+    """Function  that creates an autoencoder"""
     encoder_input = keras.Input(shape=(input_dims,))
     x = encoder_input
     for units in hidden_layers:
         x = keras.layers.Dense(units, activation='relu')(x)
-    latent = keras.layers.Dense(latent_dims, activation='relu',
+    latent = keras.layers.Dense(latent_dims,
+                                activation='relu',
                                 activity_regularizer=keras.regularizers.l1(lambtha))(x)
     encoder = keras.Model(inputs=encoder_input, outputs=latent)
 
