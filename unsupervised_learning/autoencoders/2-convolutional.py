@@ -4,7 +4,6 @@ import tensorflow.keras as keras
 
 
 def autoencoder(input_dims, filters, latent_dims):
-    """Function that creates a convolutional autoencoder"""
     encoder_input = keras.Input(shape=input_dims)
     x = encoder_input
     for f in filters:
