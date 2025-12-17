@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
+"""Comment of Function"""
 import tensorflow.keras as keras
+
 
 def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
     encoder_input = keras.Input(shape=(input_dims,))
