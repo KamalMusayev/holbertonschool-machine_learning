@@ -5,60 +5,36 @@ import tensorflow.keras as keras
 
 def autoencoder(input_dims, filters, latent_dims):
     """Function that creates a convolutional autoencoder"""
-    inputs = keras.Input(shape=input_dims)
-    enc = inputs
+    encoder_input = keras.Input(shape=input_dims)
+    x = encoder_input
 
-    for fil in filters:
-        enc = keras.layers.Conv2D(fil,
-                                  kernel_size=3,
-                                  padding="same",
-                                  activation="relu"
-                                  )(enc)
-        enc = keras.layers.MaxPooling2D(pool_size=2,
-                                        padding="same"
-                                        )(enc)
+    for f in filters:
+        x = keras.layers.Conv2D(filters=f, kernel_size=(3, 3), padding='same',
+                                activation='relu')(x)
+        x = keras.layers.MaxPool2D(pool_size=(2, 2), padding='same')(x)
 
-    dec_inputs = keras.Input((latent_dims))
-    dec = dec_inputs
+    encoder = keras.Model(inputs=encoder_input, outputs=x)
 
-    last_filter = filters[-1]
-    print(last_filter)
-    filters = filters[:-1]
-    print(filters)
+    decoder_input = keras.Input(shape=latent_dims)
+    x = decoder_input
 
-    for fil in reversed(filters):
-        dec = keras.layers.Conv2D(fil,
-                                  kernel_size=3,
-                                  padding="same",
-                                  activation="relu"
-                                  )(dec)
-        dec = keras.layers.UpSampling2D(2)(dec)
+    for f in filters[::-1]:
+        x = keras.layers.Conv2D(filters=f, kernel_size=(3, 3), padding='same',
+                                activation='relu')(x)
+        x = keras.layers.UpSampling2D(size=(2, 2))(x)
 
-    second_to_last = keras.layers.Conv2D(last_filter,
-                                         kernel_size=3,
-                                         padding="valid",
-                                         activation="relu"
-                                         )(dec)
-    second_to_last = keras.layers.UpSampling2D(2)(second_to_last)
-    outputs = keras.layers.Conv2D(input_dims[-1],
-                                  kernel_size=3,
-                                  padding="same",
-                                  activation="sigmoid"
-                                  )(second_to_last)
+    x = keras.layers.Conv2D(filters=filters[0], kernel_size=(3, 3),
+                            padding='valid', activation='relu')(x)
+    x = keras.layers.UpSampling2D(size=(2, 2))(x)
 
-    encoder = keras.Model(inputs=inputs, outputs=enc)
-    decoder = keras.Model(inputs=dec_inputs, outputs=outputs)
+    decoder_output = keras.layers.Conv2D(filters=input_dims[-1], kernel_size=(3, 3),
+                                         padding='same', activation='sigmoid')(x)
 
-    auto_input = keras.Input(shape=input_dims)
-    enc_in = encoder(auto_input)
-    dec_out = decoder(enc_in)
-    auto = keras.Model(inputs=auto_input, outputs=dec_out)
+    decoder = keras.Model(inputs=decoder_input, outputs=decoder_output)
 
-    loss = "binary_crossentropy"
-    opt = keras.optimizers.Adam()
-
-    encoder.compile(loss=loss, optimizer=opt)
-    decoder.compile(loss=loss, optimizer=opt)
-    auto.compile(loss=loss, optimizer=opt)
+    auto_input = encoder_input
+    auto_output = decoder(encoder(auto_input))
+    auto = keras.Model(inputs=auto_input, outputs=auto_output)
+    auto.compile(optimizer='adam', loss='binary_crossentropy')
 
     return encoder, decoder, auto
