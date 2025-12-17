@@ -8,14 +8,14 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     encoder_input = keras.layers.Input(shape=(input_dims,))
     x = encoder_input
     for units in hidden_layers:
-      x = keras.layers.Dense(units, activation='relu')(x)
+        x = keras.layers.Dense(units, activation='relu')(x)
     latent = keras.layers.Dense(latent_dims, activation='relu')(x)
     encoder = keras.models.Model(inputs=encoder_input, outputs=latent)
 
     decoder_input = keras.layers.Input(shape=(latent_dims,))
     x = decoder_input
     for units in hidden_layers[::-1]:
-      x = keras.layers.Dense(units, activation='relu')(x)
+        x = keras.layers.Dense(units, activation='relu')(x)
     decoder_output = keras.layers.Dense(input_dims, activation='sigmoid')(x)
     decoder = keras.models.Model(inputs=decoder_input, outputs=decoder_output)
 
