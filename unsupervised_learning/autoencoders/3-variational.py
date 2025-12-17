@@ -16,7 +16,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
 
     def sampling(args):
         z_mean, z_log_var = args
-        epsilon = keras.backend.random_normal(shape=keras.backend.shape(z_mean))
+        epsilon = (keras.backend.
+                   random_normal(shape=keras.backend.shape(z_mean)))
         return z_mean + keras.backend.exp(0.5 * z_log_var) * epsilon
 
     z = keras.layers.Lambda(sampling)([z_mean, z_log_var])
@@ -35,7 +36,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     auto_output = decoder(z_sample)
     auto = keras.Model(inputs=auto_input, outputs=auto_output)
 
-    reconstruction_loss = keras.losses.binary_crossentropy(auto_input, auto_output)
+    reconstruction_loss = keras.losses.binary_crossentropy(auto_input,
+                                                           auto_output)
     reconstruction_loss *= input_dims
     kl_loss = -0.5 * keras.backend.sum(
         1 + z_log_var_sample - keras.backend.square(z_mean_sample)
