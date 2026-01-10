@@ -9,8 +9,11 @@ class Simple_GAN(keras.Model):
     """Simple GAN class"""
 
     def __init__(self, generator, discriminator, latent_generator,
-                 real_examples, batch_size=200, disc_iter=2):
-        """Initialize Simple GAN"""
+                 real_examples, batch_size=200, disc_iter=2,
+                 learning_rate=.001):
+        """
+        Initialize Simple GAN
+        """
         super().__init__()
         self.latent_generator = latent_generator
         self.real_examples = real_examples
@@ -18,6 +21,13 @@ class Simple_GAN(keras.Model):
         self.discriminator = discriminator
         self.batch_size = batch_size
         self.disc_iter = disc_iter
+
+        self.generator.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=learning_rate)
+        )
+        self.discriminator.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=learning_rate)
+        )
 
     def get_fake_sample(self, size=None, training=False):
         """Generate fake samples"""
