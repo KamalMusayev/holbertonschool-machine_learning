@@ -4,7 +4,8 @@ import numpy as np
 
 
 class RNNCell:
-    """Represents a single cell of a vanilla (simple) Recurrent Neural Network."""
+    """Represents a single cell of a vanilla (simple) 
+    Recurrent Neural Network."""
 
     def __init__(self, i, h, o):
         """Initializes the RNN cell parameters."""
@@ -21,3 +22,4 @@ class RNNCell:
         exp = np.exp(y_linear - np.max(y_linear, axis=1, keepdims=True))
         y = exp / np.sum(exp, axis=1, keepdims=True)
         return h_next, y
+        
