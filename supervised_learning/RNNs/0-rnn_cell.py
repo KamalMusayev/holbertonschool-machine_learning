@@ -4,8 +4,9 @@ import numpy as np
 
 
 class RNNCell:
-    """Represents a single cell of a vanilla (simple) 
-    Recurrent Neural Network."""
+    """
+    Represents a single cell of a vanilla (simple) Recurrent Neural Network.
+    """
 
     def __init__(self, i, h, o):
         """Initializes the RNN cell parameters."""
