@@ -22,15 +22,18 @@ def rnn(rnn_cell, X, h_0):
     """
     t, m, i = X.shape
     h = h_0.shape[1]
-    o = rnn_cell.Wy.shape[1]
+    o = rnn_cell.by.shape[1]
 
-    H = np.zeros((t, m, h))
+    H = np.zeros((t + 1, m, h))
+    H[0] = h_0
+
     Y = np.zeros((t, m, o))
-    h_next = h_0.copy()
 
     for step in range(t):
-        h_next, y = rnn_cell.forward(h_next, X[step])
-        H[step] = h_next
-        Y[step] = y
+        x_t = X[step]
+        h_prev = H[step]
+        h_t, y_t = rnn_cell.forward(x_t, h_prev)
+        H[step + 1] = h_t
+        Y[step] = y_t
 
     return H, Y
