@@ -22,4 +22,3 @@ class RNNCell:
         exp = np.exp(y_linear - np.max(y_linear, axis=1, keepdims=True))
         y = exp / np.sum(exp, axis=1, keepdims=True)
         return h_next, y
-        
