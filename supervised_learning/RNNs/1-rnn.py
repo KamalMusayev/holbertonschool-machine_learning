@@ -10,15 +10,6 @@ import numpy as np
 def rnn(rnn_cell, X, h_0):
     """
     Performs forward propagation for a simple RNN.
-
-    Parameters:
-    rnn_cell (RNNCell): Instance of RNNCell used for forward propagation
-    X (numpy.ndarray): Input data of shape (t, m, i)
-    h_0 (numpy.ndarray): Initial hidden state of shape (m, h)
-
-    Returns:
-    H (numpy.ndarray): All hidden states of shape (t, m, h)
-    Y (numpy.ndarray): All outputs of shape (t, m, o)
     """
     t, m, i = X.shape
     h = h_0.shape[1]
