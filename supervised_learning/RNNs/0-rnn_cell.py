@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-import numpy as np
 """
 Module RNNs
 Contains the class RNNCell for a simple Recurrent Neural Network cell.
 """
+
+import numpy as np
 
 
 class RNNCell:
