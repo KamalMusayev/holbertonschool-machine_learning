@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Module GRUCell
-Contains the class GRUCell for a single Gated Recurrent Unit cell.
-"""
+"""LSTM cell module."""
 import numpy as np
 
 
