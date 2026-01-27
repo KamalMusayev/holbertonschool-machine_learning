@@ -15,6 +15,8 @@ def bag_of_words(sentences, vocab=None):
     else:
         features = vocab
 
+    word_to_idx = {word: idx for idx, word in enumerate(features)}
+
     s = len(sentences)
     f = len(features)
     embeddings = np.zeros((s, f), dtype=int)
