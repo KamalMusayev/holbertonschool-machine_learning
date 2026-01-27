@@ -1,27 +1,29 @@
 #!/usr/bin/env python3
-"""
-0x0F. Natural Language Processing - Word Embeddings
-"""
-from sklearn.feature_extraction.text import CountVectorizer
+"""Comment of Function"""
+import numpy as np
+import re
 
 
 def bag_of_words(sentences, vocab=None):
-    """
-    Creates a bag of words embedding matrix:
+    """Bag of Words"""
+    tokenized = []
 
-    sentences is a list of sentences to analyze
-    vocab is a list of the vocabulary words to use for the analysis
-    If None, all words within sentences should be used
-    Returns: embeddings, features
-    embeddings is a numpy.ndarray of shape (s, f) containing the embeddings
-    s is the number of sentences in sentences
-    f is the number of features analyzed
-    features is a list of the features used for embeddings
-    """
-    vectorizer = CountVectorizer(vocabulary=vocab)
-    X = vectorizer.fit_transform(sentences)
+    for sentence in sentences:
+        # only keep alphabetic words
+        tokens = re.findall(r"[a-z]+", sentence.lower())
+        tokenized.append(tokens)
 
-    features = vectorizer.get_feature_names()
-    embeddings = X.toarray()
+    if vocab is None:
+        features = sorted(set(word for sent in tokenized for word in sent))
+    else:
+        features = vocab
+
+    s = len(sentences)
+    f = len(features)
+    embeddings = np.zeros((s, f), dtype=int)
+
+    for i, sent in enumerate(tokenized):
+        for j, word in enumerate(features):
+            embeddings[i, j] = sent.count(word)
 
     return embeddings, features
