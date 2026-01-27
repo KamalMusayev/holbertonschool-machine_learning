@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Comment of Function"""
 import numpy as np
-import math
-
+import re
 
 def tf_idf(sentences, vocab=None):
     """TF-IDF"""
-    tokenized_sentences = [sentence.lower().split() for sentence in sentences]
+    tokenized_sentences = []
+    for sentence in sentences:
+        tokens = re.findall(r'\b\w+\b', sentence.lower())
+        tokenized_sentences.append(tokens)
 
     if vocab is None:
         all_words = set()
