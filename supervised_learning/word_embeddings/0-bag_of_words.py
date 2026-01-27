@@ -1,29 +1,34 @@
 #!/usr/bin/env python3
 """Comment of Function"""
 import numpy as np
-import re
 
 
 def bag_of_words(sentences, vocab=None):
     """Bag of Words"""
-    tokenized = []
+    tokenized_sentences = [sentence.lower().split() for sentence in sentences]
 
-    for sentence in sentences:
-        # only keep alphabetic words
-        tokens = re.findall(r"[a-z]+", sentence.lower())
-        tokenized.append(tokens)
-
+    # Determine features/vocabulary
     if vocab is None:
-        features = sorted(set(word for sent in tokenized for word in sent))
+        # Extract all unique words and sort them
+        all_words = set()
+        for tokens in tokenized_sentences:
+            all_words.update(tokens)
+        features = sorted(all_words)
     else:
         features = vocab
 
-    s = len(sentences)
-    f = len(features)
-    embeddings = np.zeros((s, f), dtype=int)
+    # Create word-to-index mapping for efficient lookup
+    word_to_index = {word: idx for idx, word in enumerate(features)}
 
-    for i, sent in enumerate(tokenized):
-        for j, word in enumerate(features):
-            embeddings[i, j] = sent.count(word)
+    # Initialize embedding matrix
+    num_sentences = len(sentences)
+    num_features = len(features)
+    embeddings = np.zeros((num_sentences, num_features), dtype=int)
+
+    # Fill the embedding matrix
+    for i, tokens in enumerate(tokenized_sentences):
+        for token in tokens:
+            if token in word_to_index:
+                embeddings[i, word_to_index[token]] += 1
 
     return embeddings, features
