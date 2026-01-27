@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Comment of Function"""
-import tensorflow.keras as K
+import tensorflow as tf
 
 def gensim_to_keras(model):
     """Convert gensim word2vec to keras Embedding"""
     weights = model.wv.vectors
 
-    embedding_layer = K.layers.Embedding(
+    embedding_layer = tf.keras.layers.Embedding(
         input_dim=weights.shape[0],
         output_dim=weights.shape[1],
         weights=[weights],
