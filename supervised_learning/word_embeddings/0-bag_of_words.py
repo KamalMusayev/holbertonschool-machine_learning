@@ -1,29 +1,17 @@
 #!/usr/bin/env python3
 """Comment of Function"""
-import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 def bag_of_words(sentences, vocab=None):
     """Bag of Words"""
-    tokenized = []
-    for sentence in sentences:
-        tokens = sentence.lower().split()
-        tokenized.append(tokens)
+    vectorizer = CountVectorizer(vocabulary=vocab)
+    X = vectorizer.fit_transform(sentences)
 
-    # Create vocabulary
-    if vocab is None:
-        features = sorted(set(word for sent in tokenized for word in sent))
-    else:
-        features = vocab
+    features = vectorizer.get_feature_names()
+    embeddings = X.toarray()
 
-    # Initialize embeddings matrix
-    s = len(sentences)
-    f = len(features)
-    embeddings = np.zeros((s, f), dtype=int)
-
-    # Create word to index mapping for efficiency
-    word_to_idx = {word: idx for idx, word in enumerate(features)}
-
+    return embeddings, features
     # Fill embeddings matrix
     for i, sent in enumerate(tokenized):
         for word in sent:
