@@ -7,7 +7,7 @@ def tf_idf(sentences, vocab=None):
     """TF-IDF"""
     tokenized_sentences = []
     for sentence in sentences:
-        tokens = re.findall(r'\b\w+\b', sentence.lower())
+        tokens = re.findall(r"\b[\w']+\b", sentence.lower())
         tokenized_sentences.append(tokens)
 
     if vocab is None:
@@ -48,4 +48,4 @@ def tf_idf(sentences, vocab=None):
 
     embeddings = tf_matrix * idf_vector
 
-    return embeddings, features
+    return embeddings, np.array(features)
