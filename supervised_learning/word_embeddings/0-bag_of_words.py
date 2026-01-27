@@ -5,30 +5,22 @@ import numpy as np
 
 def bag_of_words(sentences, vocab=None):
     """Bag of Words"""
-    tokenized_sentences = [sentence.lower().split() for sentence in sentences]
+    tokenized = []
+    for sentence in sentences:
+        tokens = sentence.lower().split()
+        tokenized.append(tokens)
 
-    # Determine features/vocabulary
     if vocab is None:
-        # Extract all unique words and sort them
-        all_words = set()
-        for tokens in tokenized_sentences:
-            all_words.update(tokens)
-        features = sorted(all_words)
+        features = sorted(set(word for sent in tokenized for word in sent))
     else:
         features = vocab
 
-    # Create word-to-index mapping for efficient lookup
-    word_to_index = {word: idx for idx, word in enumerate(features)}
+    s = len(sentences)
+    f = len(features)
+    embeddings = np.zeros((s, f), dtype=int)
 
-    # Initialize embedding matrix
-    num_sentences = len(sentences)
-    num_features = len(features)
-    embeddings = np.zeros((num_sentences, num_features), dtype=int)
-
-    # Fill the embedding matrix
-    for i, tokens in enumerate(tokenized_sentences):
-        for token in tokens:
-            if token in word_to_index:
-                embeddings[i, word_to_index[token]] += 1
+    for i, sent in enumerate(tokenized):
+        for j, word in enumerate(features):
+            embeddings[i, j] = sent.count(word)
 
     return embeddings, features
