@@ -15,7 +15,8 @@ def fasttext_model(sentences, vector_size=100, min_count=5,
         sg=0 if cbow else 1,
         epochs=epochs,
         seed=seed,
-        workers=workers
+        workers=workers,
+        hashfxn=hash
     )
 
     return model
