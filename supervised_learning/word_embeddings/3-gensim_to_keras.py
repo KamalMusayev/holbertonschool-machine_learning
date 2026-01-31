@@ -4,13 +4,15 @@ import tensorflow as tf
 
 def gensim_to_keras(model):
     """Convert gensim word2vec to keras Embedding"""
-    weights = model.wv.vectors
+    embedding_matrix = model.wv.vectors
 
-    embedding_layer = tf.keras.layers.Embedding(
-        input_dim=weights.shape[0],
-        output_dim=weights.shape[1],
-        weights=[weights],
+    vocab_size, embedding_dim = embedding_matrix.shape
+
+    layer = tf.keras.layers.Embedding(
+        input_dim=vocab_size,
+        output_dim=embedding_dim,
+        weights=[embedding_matrix],
         trainable=True
     )
 
-    return embedding_layer
+    return layer

@@ -7,45 +7,67 @@ def tf_idf(sentences, vocab=None):
     """TF-IDF"""
     tokenized_sentences = []
     for sentence in sentences:
-        tokens = re.findall(r"\b[\w']+\b", sentence.lower())
-        tokenized_sentences.append(tokens)
+        cleaned = sentence.lower()
+        for char in "!.,?;:\"":
+            cleaned = cleaned.replace(char, " ")
+        words = cleaned.split()
+        processed_words = []
+        for word in words:
+            if word.endswith("'s"):
+                word = word[:-2]
+            elif word.endswith("'"):
+                word = word[:-1]
+            if word:
+                processed_words.append(word)
+        tokenized_sentences.append(processed_words)
 
     if vocab is None:
-        all_words = set()
-        for tokens in tokenized_sentences:
-            all_words.update(tokens)
-        features = sorted(all_words)
+        vocab_set = set()
+        for words in tokenized_sentences:
+            vocab_set.update(words)
+        vocab = sorted(list(vocab_set))
     else:
-        features = vocab
+        vocab = list(vocab)
 
-    word_to_index = {word: idx for idx, word in enumerate(features)}
+    features = np.array(vocab)
 
-    num_sentences = len(sentences)
-    num_features = len(features)
+    # Create word to index mapping
+    word_to_idx = {word: idx for idx, word in enumerate(vocab)}
 
-    tf_matrix = np.zeros((num_sentences, num_features))
+    s = len(sentences)
+    f = len(vocab)
 
-    for i, tokens in enumerate(tokenized_sentences):
-        for token in tokens:
-            if token in word_to_index:
-                tf_matrix[i, word_to_index[token]] += 1
+    tf_matrix = np.zeros((s, f), dtype=float)
 
-        if len(tokens) > 0:
-            tf_matrix[i] = tf_matrix[i] / len(tokens)
+    for i, words in enumerate(tokenized_sentences):
+        word_count = {}
+        for word in words:
+            if word in word_to_idx:
+                word_count[word] = word_count.get(word, 0) + 1
 
-    idf_vector = np.zeros(num_features)
+        total_words = len(words) if words else 1
+        for word, count in word_count.items():
+            idx = word_to_idx[word]
+            tf_matrix[i, idx] = count / total_words
 
-    for j, word in enumerate(features):
+    idf_vector = np.zeros(f, dtype=float)
+
+    for j, word in enumerate(vocab):
         doc_count = 0
-        for tokens in tokenized_sentences:
-            if word in tokens:
+        for words in tokenized_sentences:
+            if word in words:
                 doc_count += 1
 
         if doc_count > 0:
-            idf_vector[j] = np.log(num_sentences / doc_count)
+            idf_vector[j] = np.log((s + 1) / (doc_count + 1)) + 1
         else:
-            idf_vector[j] = 0
+            idf_vector[j] = 1
 
-    embeddings = tf_matrix * idf_vector
+    tfidf_matrix = tf_matrix * idf_vector
 
-    return embeddings, np.array(features)
+    for i in range(s):
+        norm = np.linalg.norm(tfidf_matrix[i])
+        if norm > 0:
+            tfidf_matrix[i] = tfidf_matrix[i] / norm
+
+    return tfidf_matrix, features
