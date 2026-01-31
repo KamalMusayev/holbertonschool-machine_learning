@@ -2,6 +2,7 @@
 """Comment of Function"""
 import tensorflow as tf
 
+
 def gensim_to_keras(model):
     """Convert gensim word2vec to keras Embedding"""
     embedding_matrix = model.wv.vectors

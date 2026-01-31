@@ -3,6 +3,7 @@
 import numpy as np
 import re
 
+
 def tf_idf(sentences, vocab=None):
     """TF-IDF"""
     tokenized_sentences = []
