@@ -3,14 +3,13 @@
 import numpy as np
 
 
-def ngram_bleu(references, sentence, n):
+def cumulative_bleu(references, sentence, n):
     """N-gram BLEU score"""
-
     def get_ngram(words, n):
         """N-gram representation of sentence"""
         ngrams = []
         for i in range(len(words) - n + 1):
-            ngram = tuple(words[i:i + n])
+            ngram = tuple(words[i:i+n])
             ngrams.append(ngram)
         return ngrams
 
