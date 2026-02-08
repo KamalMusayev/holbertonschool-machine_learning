@@ -1,44 +1,45 @@
 #!/usr/bin/env python3
 """Comment of Function"""
-import tensorflow as tf
+import numpy as np
 
 
-class RNNEncoder(tf.keras.layers.Layer):
-    """RNN Encoder class for encoding input sequences"""
+def bag_of_words(sentences, vocab=None):
+    """Bag of Words"""
+    tokenized_sentences = []
+    for sentence in sentences:
+        cleaned = sentence.lower()
+        for char in "!.,?;:\"":
+            cleaned = cleaned.replace(char, " ")
+        words = cleaned.split()
+        processed_words = []
+        for word in words:
+            if word.endswith("'s"):
+                word = word[:-2]
+            elif word.endswith("'"):
+                word = word[:-1]
+            if word:
+                processed_words.append(word)
+        tokenized_sentences.append(processed_words)
 
+    if vocab is None:
+        vocab_set = set()
+        for words in tokenized_sentences:
+            vocab_set.update(words)
+        vocab = sorted(list(vocab_set))
+    else:
+        vocab = list(vocab)
 
-    def __init__(self, vocab, embedding, units, batch):
-        """
-        Initialize the RNN Encoder
-        """
-        super(RNNEncoder, self).__init__()
-        self.batch = batch
-        self.units = units
+    features = vocab
 
-        self.embedding = tf.keras.layers.Embedding(
-            input_dim=vocab,
-            output_dim=embedding
-        )
+    word_to_idx = {word: idx for idx, word in enumerate(features)}
 
-        self.gru = tf.keras.layers.GRU(
-            units=units,
-            return_sequences=True,
-            return_state=True,
-            recurrent_initializer='glorot_uniform'
-        )
+    s = len(sentences)
+    f = len(features)
+    embeddings = np.zeros((s, f), dtype=int)
 
-    def initialize_hidden_state(self):
-        """
-        Initializes the hidden states for the RNN cell to a tensor of zeros
-        """
-        return tf.zeros((self.batch, self.units))
+    for i, words in enumerate(tokenized_sentences):
+        for word in words:
+            if word in word_to_idx:
+                embeddings[i, word_to_idx[word]] += 1
 
-    def call(self, x, initial):
-        """
-        Forward pass through the encoder
-        """
-        x = self.embedding(x)
-
-        outputs, hidden = self.gru(x, initial_state=initial)
-
-        return outputs, hidden
+    return embeddings, np.array(features)
