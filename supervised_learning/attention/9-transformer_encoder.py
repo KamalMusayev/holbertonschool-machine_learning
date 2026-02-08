@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Comment of Class"""
+"""Transformer Encoder"""
 import tensorflow as tf
 
 positional_encoding = __import__('4-positional_encoding').positional_encoding
