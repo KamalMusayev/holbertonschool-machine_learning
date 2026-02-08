@@ -6,7 +6,6 @@ import tensorflow as tf
 class RNNEncoder(tf.keras.layers.Layer):
     """RNN Encoder class for encoding input sequences"""
 
-
     def __init__(self, vocab, embedding, units, batch):
         """
         Initialize the RNN Encoder
