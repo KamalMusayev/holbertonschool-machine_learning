@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Comment of Function"""
+"""Comment of Class"""
 import tensorflow as tf
 
 
