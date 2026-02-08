@@ -47,7 +47,6 @@ class DecoderBlock(tf.keras.layers.Layer):
 
         out2 = self.layernorm2(out1 + attn2)
 
-
         ffn_output = self.dense_hidden(out2)
         ffn_output = self.dense_output(ffn_output)
 
