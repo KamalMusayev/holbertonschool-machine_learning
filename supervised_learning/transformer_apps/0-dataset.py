@@ -3,6 +3,7 @@
 0x12 Transformer applications
 """
 import tensorflow_datasets as tfds
+import transformers
 
 
 class Dataset:
