@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
-"""rotate image"""
+"""2-rotate.py"""
+
 import tensorflow as tf
 
 
 def rotate_image(image):
-    """that rotates an image by 90 degrees counter-clockwise"""
+    """
+    Rotates an image 90 degrees counter-clockwise.
+
+    image: 3D tf.Tensor (height, width, channels)
+
+    Returns: rotated image (tf.Tensor)
+    """
     return tf.image.rot90(image)
