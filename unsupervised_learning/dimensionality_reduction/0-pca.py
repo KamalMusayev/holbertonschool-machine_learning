@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-"""Comment of Function"""
+"""Dimensionality Reduction algorithms implementations."""
 import numpy as np
 
 
 def pca(X, var=0.95):
-    """Principal Component Analysis"""
+    """
+    Compute the PCA, to get var% of the var explain
+    :param X: The X to decompose
+    :param var: The var threshold
+    :return: THe W matrix
+    """
     U, S, Vt = np.linalg.svd(X)
 
     total_var_explain = 0

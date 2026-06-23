@@ -94,3 +94,15 @@ class NST:
             inputs=vgg.input,
             outputs=[content_output] + style_outputs
         )
+
+    @staticmethod
+    def gram_matrix(input_layer):
+        """Calculate the Gram matrix of a given layer output."""
+        if not isinstance(input_layer, (tf.Tensor, tf.Variable)):
+            raise TypeError("input_layer must be a tensor of rank 4")
+        if len(input_layer.shape) != 4:
+            raise TypeError("input_layer must be a tensor of rank 4")
+        input_layer = tf.reshape(input_layer, [-1, input_layer.shape[-1]])
+        gram = tf.matmul(input_layer, input_layer, transpose_a=True)
+        gram = tf.expand_dims(gram, axis=0)
+        return gram / tf.cast(tf.shape(input_layer)[0], tf.float32)
